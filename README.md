@@ -4,6 +4,9 @@
 
 ## Спринт 1
 
+Netlify: https://cerulean-dusk-79c838.netlify.app/home/ (Роутинг не настроен, нужно прописывать полностью путь до файла н.р '/404/404')
+Макет: https://www.figma.com/file/osvwMgI3nuAJZQVWLZHEKI/Chat_external_link?node-id=0%3A1 и папка ui
+
 Реализованные задачи:
 
 - Верстска всех страниц проекта и его элементов с использованием шаблонизатора Handlebars
