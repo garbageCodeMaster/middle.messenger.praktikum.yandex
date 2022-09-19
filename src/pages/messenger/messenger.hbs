@@ -10,7 +10,7 @@ styles:
 ---
 
 {{!< main}}
-<div class="messenger">
+<main class="messenger">
     <div class="chat-menu">
         <div class="chat-menu__header">
             <div class="profile">
@@ -35,11 +35,11 @@ styles:
                 <input class="search__input" type="text" placeholder="search">
             </div>
         </div>
-        <div class="chat-menu__chats scrollbar">
+        <ul class="chat-menu__chats scrollbar">
             {{#each chats.chats}}
                 {{> 'chat/chat' chat=this}}
             {{/each}}
-        </div>
+        </ul>
     </div>
     <div class="chat-content">
         {{#if false}}
@@ -79,7 +79,7 @@ styles:
             </div>
         {{/if}}
     </div>
-</div>
+</main>
 
 
 <div style="position: absolute; left: 0; display: flex; align-items: flex-start; flex-direction: column" >
