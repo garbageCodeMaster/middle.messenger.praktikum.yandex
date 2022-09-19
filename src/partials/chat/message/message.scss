@@ -1,0 +1,29 @@
+.message {
+    display: flex;
+    padding: 10px;
+
+    &__content {
+        word-wrap: break-word;
+    }
+
+    &__time {
+        position: relative;
+        float: right;
+
+        font-size: 12px;
+        top: 10px;
+    }
+}
+
+.message-wrapper {
+    background-color: #F8F8F8;
+    border-radius: 15px;
+    
+    max-width: 60%;
+    margin: 0 7px;
+    padding: 10px;
+}
+
+.message--outgoing {
+    flex-direction: row-reverse;
+}

@@ -1,0 +1,28 @@
+<div class="card">
+    <h3 class="card__header">
+        {{#if add}}
+            Add new user
+        {{else}}
+            Delete user
+        {{/if}}
+    </h3>
+
+    <form class="card-form">  
+        <div class="card__main">
+            <div class="input-list">
+                <div class="input">
+                    <input type="text" class="input__field" name="login" required/>
+                    <label class="input__label">login</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="card__action">
+            {{#if add}}
+                <button class="action-button">Add</button>
+            {{else}}
+                <button class="action-button">Delete</button>
+            {{/if}}
+        </div>
+    </form> 
+</div>

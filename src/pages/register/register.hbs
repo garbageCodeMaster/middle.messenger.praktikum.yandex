@@ -1,0 +1,51 @@
+---
+styles:
+    - '../../styles/styles.scss'
+    - '../../layouts/main.scss'
+    - '../../styles/log.scss'
+---
+
+{{!< main}}
+
+<div class="card">
+    <form class="card-form">
+        <div class="input-list">
+            <div class="form-header">
+                Register
+            </div>
+
+            <div class="input">
+                <input type="email" class="input__field" name="email" required/>
+                <label class="input__label">email</label>
+            </div>
+            <div class="input">
+                <input type="text" class="input__field" name="login" required/>
+                <label class="input__label">login</label>
+            </div>
+            <div class="input">
+                <input type="text" class="input__field" name="name" required/>
+                <label class="input__label">name</label>
+            </div>
+            <div class="input">
+                <input type="phone" class="input__field" name="phone" required/>
+                <label class="input__label">phone</label>
+            </div>
+            <div class="input">
+                <input type="password" class="input__field" name="password" required/>
+                <label class="input__label">password</label>
+            </div>
+            <div class="input">
+                <input type="password" class="input__field" name="password" required/>
+                <label class="input__label">password (check)</label>
+            </div>
+        </div>
+        <div class="button-list">
+            <div class="action">
+                <button class="action-button">Get started</button>
+            </div>
+            <div class="link">
+                <a href="../home/index.hbs" class="link-button">Already have an account?</a> 
+            </div>
+        </div>
+    </form>
+</div>
