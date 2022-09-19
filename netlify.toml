@@ -1,2 +1,5 @@
 [build]
   command = "npm run start"
+
+[build.environment]
+  NODE_VERSION = "17"
