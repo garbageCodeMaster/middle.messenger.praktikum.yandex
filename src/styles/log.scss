@@ -1,5 +1,7 @@
+@use './variables.scss' as var;
+
 .card {
-    background-color: #FFFFFF;
+    background-color: var.$white;
 
     display: flex;
     align-items: center;
@@ -41,27 +43,27 @@
     position: relative;
     margin-bottom: 40px;
 
+    &-inline {
+        padding: 0;
+        text-align: right;
+        font-size: 16px;
+    }
+
     &__field {
-        background-color: transparent;
-
         width: 280px;
-
-        border: 0;
-        border-bottom: 2px solid #3369F3;
-        
-        outline: none;
+        border-bottom: 2px solid var.$blue;
 
         &:focus, &:valid {
-            border-bottom-color: #6658d3;
+            border-bottom-color: var.$purple;
             &+.input__label {
-                color: #6658d3;
+                color: var.$purple;
                 transform: translateY(-1.3rem);
             }
         }
     }
 
     &__label {
-        color: #8597a3;
+        color: var.$gray;
 
         position: absolute;
         top: -2px;
@@ -77,20 +79,24 @@
     margin-bottom: 30px;
 }
 
-.action-button {
-    width: 280px;
-    height: 37px;
+.action {
+    margin: 0 auto;
 
-    background: #3369F3;
-    border-radius: 8px;
-    border: none;
+    &-button {
+        width: 280px;
+        height: 37px;
 
-    &:hover {
-        background: #144ad3;
-    }
+        background: var.$blue;
+        border-radius: 8px;
+        border: none;
 
-    &:focus {
-        background: #6658d3;
+        &:hover {
+            background: var.$dark-blue;
+        }
+
+        &:focus {
+            background: var.$purple;
+        }
     }
 }
 
@@ -106,5 +112,5 @@
     font-size: 13px;
     line-height: 11px;
 
-    color: #3369F3;
+    color: var.$blue;
 }

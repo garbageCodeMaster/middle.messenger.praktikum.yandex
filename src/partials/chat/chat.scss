@@ -1,3 +1,5 @@
+@use '/src/styles/variables.scss' as var;
+
 .chat {
     position: relative;
     display: flex;
@@ -16,17 +18,17 @@
         width: 90%;
         margin-top: 5px;
 
-        background-color:#000;
+        background-color: var.$black;
         top: 100%;
         left: 5%;
     }
 
     &:hover {
-        background-color: #E4EDFD;
+        background-color: var.$light-blue;
     }
 
     &--active {
-        background-color: #E4EDFD;
+        background-color: var.$light-blue;
     }
 
     &__content {
