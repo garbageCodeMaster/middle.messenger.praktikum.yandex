@@ -1,0 +1,25 @@
+<div class="card">
+    <h3 class="card__header card__header--{{classHeader}}">
+        {{header}}
+    </h3>
+    
+    <div class="card__main">
+        {{#if main}}
+        <div class="card__main-file">
+            {{main}}
+        </div>
+        {{else}}
+        <button class="effect-button like-link">Choose from pc</button>
+        {{/if}}
+    </div>
+
+    <div class="card__action">
+        <button class="action-button">Apply</button>
+    </div>
+
+    {{#if additional}}
+    <h5 class="card__additional {{classAdditional}}">
+        file must be choosen
+    </h5>
+    {{/if}}
+</div>
