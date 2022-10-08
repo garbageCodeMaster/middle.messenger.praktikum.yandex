@@ -1,0 +1,16 @@
+@use '/src/styles/variables.scss' as var;
+
+.link {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.link-button {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 11px;
+
+  color: var.$blue;
+}

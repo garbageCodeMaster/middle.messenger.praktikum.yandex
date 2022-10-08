@@ -1,0 +1,47 @@
+@use '/src/styles/variables.scss' as var;
+
+.input {
+  position: relative;
+  margin-bottom: 40px;
+
+  &-inline {
+      padding: 0;
+      text-align: right;
+      font-size: 16px;
+  }
+
+  &__field {
+      width: 280px;
+      border-bottom: 2px solid var.$blue;
+
+      &:focus, &:valid {
+          border-bottom-color: var.$purple;
+          &+.input__label {
+              color: var.$purple;
+              transform: translateY(-1.3rem);
+          }
+      }
+  }
+
+  &__label {
+      color: var.$gray;
+
+      position: absolute;
+      top: -2px;
+      left: 0;
+      pointer-events: none;
+
+      transition: .25s ease;
+  }
+
+  &__error {
+    color: rgba(241, 18, 18, 0.8);
+    font-size: 12px;
+    text-align: center;
+    height: 12px;
+  }
+}
+
+input:disabled {
+  color: #000;
+}
