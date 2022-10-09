@@ -88,15 +88,6 @@ export default class Block<P extends BlockProps = Record<string, unknown>> {
   }
 
   _componentDidUpdate(oldProps: P, newProps: P) {
-    // const response = this.componentDidUpdate(oldProps, newProps);
-    // //console.log(response);
-    // if (!response.length) {
-    //   this._render();
-    //   return;
-    // }
-
-    // response.forEach((el) => el._render());
-
     const response = true;
     if (!response) {
       return;
@@ -109,26 +100,6 @@ export default class Block<P extends BlockProps = Record<string, unknown>> {
   componentDidUpdate() {
   }
 
-  // componentDidUpdate(oldProps: P, newProps: P): boolean{//Block[] {
-  //   // const propsUpdated = isEqual(oldProps, newProps);
-  //   // const childsUpdated = [] as Block[];
-  //   // console.log(this.refs)
-
-  //   // Object.values(this.refs).forEach((child) => {
-  //   //   Object.keys(propsUpdated).forEach((key) => {
-  //   //     if (child.props[key]) {
-  //   //       console.log(child);
-  //   //       childsUpdated.push(child);
-  //   //     }
-  //   //   });
-  //   // });
-
-  //   // //console.log(childsUpdated);
-
-  //   // return childsUpdated;
-  //   return true;
-  // }
-
   setProps = (nextProps: P) => {
     if (!nextProps) {
       return;
@@ -138,7 +109,6 @@ export default class Block<P extends BlockProps = Record<string, unknown>> {
 
     Object.assign(this._props, nextProps);
     this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, { ...this._props });
-    // this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   };
 
   get props() {
