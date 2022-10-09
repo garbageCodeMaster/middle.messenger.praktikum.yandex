@@ -133,7 +133,7 @@
     outline: none;
 
     &::placeholder {
-      color: rgb(var.$dark-gray / 80%);
+      color: rgba(var.$dark-gray, 80%);
       letter-spacing: 1.5px;
       text-transform: uppercase;
     }
