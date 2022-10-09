@@ -4,7 +4,7 @@
 
 ## Спринт 2
 
-Netlify: https://cerulean-dusk-79c838.netlify.app/home/ 
+Netlify: https://cerulean-dusk-79c838.netlify.app/index/ 
 
 Реализованные задачи:
 
