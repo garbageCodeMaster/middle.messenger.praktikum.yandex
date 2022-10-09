@@ -1,29 +1,27 @@
 .message {
-    display: flex;
-    padding: 10px;
+  display: flex;
+  padding: 10px;
 
-    &__content {
-        word-wrap: break-word;
-    }
+  &__content {
+    word-wrap: break-word;
+  }
 
-    &__time {
-        position: relative;
-        float: right;
-
-        font-size: 12px;
-        top: 10px;
-    }
+  &__time {
+    position: relative;
+    top: 10px;
+    float: right;
+    font-size: 12px;
+  }
 }
 
 .message-wrapper {
-    background-color: #F8F8F8;
-    border-radius: 15px;
-    
-    max-width: 60%;
-    margin: 0 7px;
-    padding: 10px;
+  max-width: 60%;
+  margin: 0 7px;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 15px;
 }
 
 .message--outgoing {
-    flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }

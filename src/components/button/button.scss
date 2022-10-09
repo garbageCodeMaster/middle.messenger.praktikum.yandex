@@ -1,31 +1,29 @@
-@use '/src/styles/variables.scss' as var;
+@use "/src/styles/variables.scss" as var;
 
 .action-button {
-    width: 280px;
-    height: 37px;
+  width: 280px;
+  height: 37px;
+  background: var.$blue;
+  border: none;
+  border-radius: 8px;
 
-    background: var.$blue;
-    border-radius: 8px;
-    border: none;
+  &:hover {
+    background: var.$dark-blue;
+  }
 
-    &:hover {
-        background: var.$dark-blue;
-    }
-
-    &:focus {
-        background: var.$purple;
-    }
+  &:focus {
+    background: var.$purple;
+  }
 }
 
 .effect-button {
-    color: var.$blue;
-    border: none;
-    padding: 5px 0;
-    font-size: 17px;
-    cursor: pointer;
+  padding: 5px 0;
+  color: var.$blue;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
 
-    &--red {
-        color: var.$red;
-    }
+  &--red {
+    color: var.$red;
+  }
 }
-

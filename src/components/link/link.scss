@@ -1,4 +1,4 @@
-@use '/src/styles/variables.scss' as var;
+@use "/src/styles/variables.scss" as var;
 
 .link {
   margin-top: 14px;
@@ -6,11 +6,10 @@
 }
 
 .link-button {
-  font-family: 'Inter';
-  font-style: normal;
+  color: var.$blue;
   font-weight: 500;
   font-size: 13px;
+  font-family: Inter;
+  font-style: normal;
   line-height: 11px;
-
-  color: var.$blue;
 }

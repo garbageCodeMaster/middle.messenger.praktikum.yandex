@@ -3,10 +3,6 @@ import { getMyData } from 'utils/fakeData/getMyData';
 
 import './about.scss';
 
-interface AboutPageProps {
-  fields: Array<{key: string; value: string}>
-}
-
 export class AboutPage extends Block {
   static componentName = 'AboutPage';
 
@@ -19,7 +15,7 @@ export class AboutPage extends Block {
 
     this.setProps({
       onDataChange: () => {
-        Object.values(this.refs.InputsList.refs).forEach((field, i) => {
+        Object.values(this.refs.InputsList.refs).forEach((field) => {
           field.refs.input.setProps({ ...(field.refs.input.getContent() as HTMLInputElement), disabled: false });
         });
 
@@ -64,8 +60,8 @@ export class AboutPage extends Block {
         });
       },
       onSubmit: () => {
-        const inputValue = {} as any;
-        Object.values(this.refs.InputsList.refs).forEach((field, i) => {
+        const inputValue = {} as Record<string, unknown>;
+        Object.values(this.refs.InputsList.refs).forEach((field) => {
           inputValue[field.props.key] = (field.refs.input.getContent() as HTMLInputElement).value;
         });
 

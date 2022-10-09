@@ -1,202 +1,188 @@
-@use '/src/styles/variables.scss' as var;
+@use "/src/styles/variables.scss" as var;
 
-.messenger {    
-    display: flex;
-    width: 100%;
-    height: 100vh;
+.messenger {
+  display: flex;
+  width: 100%;
+  height: 100vh;
 }
 
 .chat-menu {
-    background-color: var.$snow-white;
-    border-right: 1px solid var.$black;
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  background-color: var.$snow-white;
+  border-right: 1px solid var.$black;
 
+  &__header {
     width: 350px;
-    display: flex;
-    flex-direction: column;
+    border-bottom: 1px solid var.$black;
+  }
 
-    &__header {
-        width: 350px;
-        border-bottom: 1px solid var.$black;
-    }
-    
-    &__chats {
-        height: 100%;
-    }
+  &__chats {
+    height: 100%;
+  }
 }
 
 .chat-content {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-right: 1px solid var.$black;
+  border-radius: 5px;
+
+  &__header {
     width: 100%;
-
-    border-right: 1px solid var.$black;
-    border-radius: 5px;
-
-    &__header {
-        width: 100%;
-
-        border-bottom: 1px solid var.$black;
-    }
+    border-bottom: 1px solid var.$black;
+  }
 }
 
 .panel {
-    display: flex;
-    position: relative;
-    height: 50px;
+  position: relative;
+  display: flex;
+  height: 50px;
 
-    &__button {
-        background-color: transparent;
-        border: none;
-        border-radius: 15px;
-
-        width: 50px;
-        
-        &:hover {
-            background-color: var.$light-blue;
-        }
-    }
-
-    &__input {
-        width: 100%;
-        height: 100%;
-        padding: 8px;
-    
-        background-color: transparent;
-        color: var.$dark-gray;
-    
-        border: none;
-        border-radius: 5px;
-        outline: none;
-
-        &:valid {
-            color: var.$black;
-        }
-    }
-
-    &:before {
-        content: "";
-
-        position: absolute;
-        display: block;
-        
-        height: 1px;
-        width: 98%;
-        margin-top: 5px;
-
-        background-color:var.$black;
-        left: 1%;
-        top: -6px;
-    }
-}
-
-.profile {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-
-    padding: 10px;
-
-    &__content {
-        display: flex;
-        flex-direction: row;
-    }
-
-    &__settings {
-        margin-left: 15px;
-    }
-}
-
-.profile-info {
-    margin-left: 15px;
-
-    &__name {
-        font-size: 15px;
-        font-weight: bold;
-    }
-
-    &__text {
-        word-break: break-all;
-        font-size: 12px;
-        height: 37px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
-
-.search {
-    margin: 10px 0 0px;
-    
-    &__input {
-        width: 100%;
-        padding: 8px 26px;
-
-        background-color: transparent;
-        color: var.$dark-gray;
- 
-        background-image: url("/static/icons/search.svg");
-        background-repeat: no-repeat;
-        background-position: 5px;
-        background-size: 18px 18px;
-        border: none;
-        border-radius: 5px;
-        outline: none;
-        
-        &::placeholder {
-            color: color(var.$dark-gray a(0.8));
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-    }
-}
-
-.scrollbar {
-    height: 100%;
-    overflow-y: auto;
-    
-    &::-webkit-scrollbar {
-        width: 6px;
-    }
-    
-    &::-webkit-scrollbar-track {
-        background: var.$scrollbar-track;
-        border-radius: 10px;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-        background: var.$scrollbar-thumb;
-        border-radius: 10px;
-    }
-    
-    &::-webkit-scrollbar-thumb:hover {
-        background: var.$scrollbar-thumb--hover;
-        border-radius: 10px;
-    }
-    
-    &::-webkit-scrollbar-thumb:active {
-        background: var.$scrollbar-thumb--active;
-        border-radius: 10px;
-    }
-}
-
-.settings-button {
+  &__button {
+    width: 50px;
     background-color: transparent;
     border: none;
     border-radius: 15px;
 
-    width: 70px;
-    
     &:hover {
-        background-color: var.$light-blue;
+      background-color: var.$light-blue;
     }
+  }
+
+  &__input {
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    color: var.$dark-gray;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+
+    &:valid {
+      color: var.$black;
+    }
+  }
+
+  &::before {
+    position: absolute;
+    top: -6px;
+    left: 1%;
+    display: block;
+    width: 98%;
+    height: 1px;
+    margin-top: 5px;
+    background-color: var.$black;
+    content: "";
+  }
+}
+
+.profile {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+
+  &__content {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__settings {
+    margin-left: 15px;
+  }
+}
+
+.profile-info {
+  margin-left: 15px;
+
+  &__name {
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  &__text {
+    display: box;
+    height: 37px;
+    overflow: hidden;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.search {
+  margin: 10px 0 0;
+
+  &__input {
+    width: 100%;
+    padding: 8px 26px;
+    color: var.$dark-gray;
+    background-color: transparent;
+    background-image: url("/static/icons/search.svg");
+    background-repeat: no-repeat;
+    background-position: 5px;
+    background-size: 18px 18px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+
+    &::placeholder {
+      color: rgb(var.$dark-gray 0.8);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.scrollbar {
+  height: 100%;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var.$scrollbar-track;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var.$scrollbar-thumb;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var.$scrollbar-thumb--hover;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background: var.$scrollbar-thumb--active;
+    border-radius: 10px;
+  }
+}
+
+.settings-button {
+  width: 70px;
+  background-color: transparent;
+  border: none;
+  border-radius: 15px;
+
+  &:hover {
+    background-color: var.$light-blue;
+  }
 }
 
 .nothing {
-    display: flex;
-    justify-content: center;
-
-    width: 100%;
-    margin-top: 50vh;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 50vh;
 }

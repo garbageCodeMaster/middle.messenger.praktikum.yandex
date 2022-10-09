@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "parcel src/pages/**/*.hbs  --no-cache",
+    "dev": "parcel src/pages/**/*.html --no-cache",
     "build": "parcel build src/pages/**/*.html --no-source-maps --no-cache",
     "start": "npm run build && node ./server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --fix"
+    "lint:es": "eslint . --fix",
+    "lint:style": "stylelint . --fix"
   },
   "alias": {
     "core": "./src/core",
@@ -32,13 +33,17 @@
     "handlebars": "^4.7.7",
     "parcel": "^2.7.0",
     "postcss-import": "^15.0.0",
+    "stylelint": "^14.13.0",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-standard": "^28.0.0",
+    "stylelint-order": "^5.0.0",
+    "stylelint-scss": "^4.3.0",
     "typescript": "^4.8.4"
   },
   "dependencies": {
     "express": "^4.18.1",
     "postcss": "^8.4.16",
     "postcss-nesting": "^10.2.0",
-    "postcss-short": "^5.0.0",
-    "uuid": "^9.0.0"
+    "postcss-short": "^5.0.0"
   }
 }

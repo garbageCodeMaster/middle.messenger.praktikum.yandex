@@ -1,57 +1,53 @@
-@use '/src/styles/variables.scss' as var;
+@use "/src/styles/variables.scss" as var;
 
 .chat {
-    position: relative;
-    display: flex;
-    flex-direction: row;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  margin: 5px 0 10px;
+  padding: 20px;
 
-    padding: 20px;
-    margin: 5px 0 10px;
-    
-    &::after {
-        content: "";
+  &::after {
+    position: absolute;
+    top: 100%;
+    left: 5%;
+    display: block;
+    width: 90%;
+    height: 1px;
+    margin-top: 5px;
+    background-color: var.$black;
+    content: "";
+  }
 
-        position: absolute;
-        display: block;
-        
-        height: 1px;
-        width: 90%;
-        margin-top: 5px;
+  &:hover {
+    background-color: var.$light-blue;
+  }
 
-        background-color: var.$black;
-        top: 100%;
-        left: 5%;
-    }
+  &--active {
+    background-color: var.$light-blue;
+  }
 
-    &:hover {
-        background-color: var.$light-blue;
-    }
-
-    &--active {
-        background-color: var.$light-blue;
-    }
-
-    &__content {
+  &__content {
     width: 350px;
     margin-left: 15px;
 
-        &-name {
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        &-text {
-            font-size: 12px;
-            height: 37px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    &-name {
+      font-weight: bold;
+      font-size: 15px;
     }
 
-    &__time {
-        font-size: 10px;
+    &-text {
+      display: box;
+      height: 37px;
+      overflow: hidden;
+      font-size: 12px;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
+  }
+
+  &__time {
+    font-size: 10px;
+  }
 }

@@ -1,69 +1,67 @@
-@use './variables.scss' as var;
+@use "./variables.scss" as var;
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: "DM Sans", sans-serif;
-	line-height: 1.5;
-	background-color: var.$light-gray;
-    margin: 0;
+  margin: 0;
+  font-family: "DM Sans", sans-serif;
+  line-height: 1.5;
+  background-color: var.$light-gray;
 }
 
 p {
-    margin: 0;
+  margin: 0;
 }
 
-ul, li {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 input {
-    background-color: transparent;
-    border: 0;
-    outline: none;
+  background-color: transparent;
+  border: 0;
+  outline: none;
 }
 
 .error {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    
-    height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
 
-    &__title {
-        margin-bottom: 10px;
-    }
+  &__title {
+    margin-bottom: 10px;
+  }
 }
 
 .profile-picture {
+  &--small {
+    width: 37px;
+    height: 37px;
+  }
 
-    &--small {
-        width: 37px;
-        height: 37px;
-    }
+  &--medium {
+    width: 47px;
+    height: 47px;
+  }
 
-    &--medium {
-        width: 47px;
-        height: 47px;
-    }
+  &--large {
+    width: 57px;
+    height: 57px;
+  }
 
-    &--large {
-        width: 57px;
-        height: 57px;
-    }
-
-    &--gargantuan {
-        width: 107px;
-        height: 107px;
-    }
+  &--gargantuan {
+    width: 107px;
+    height: 107px;
+  }
 }
 
 .profile-img {
-    border-radius: 50%;
+  border-radius: 50%;
 }
-
