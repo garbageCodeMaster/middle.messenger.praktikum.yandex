@@ -1,17 +1,20 @@
-import Block from 'core/Block';
+import { Block } from 'core';
 
 import './profile.scss';
 
 interface ProfileProps {
   username?: string;
   status?: string;
-}
+
+  onClick?: () => void;
+};
+
 
 export class Profile extends Block {
   static componentName = 'Profile';
 
-  constructor({ username, status }: ProfileProps) {
-    super({ username, status });
+  constructor({ username, status, onClick}: ProfileProps) {
+    super({ username, status, onClick});
   }
 
   protected render(): string {
@@ -22,7 +25,7 @@ export class Profile extends Block {
         ref="AvatarRef"
         size="large"
         src="https://place-hold.it/57"
-        onClick=onClick 
+        onClick=onAvatarClick 
       }}}
         <div class="profile-info">
             <div class="profile-info__name">
@@ -34,7 +37,7 @@ export class Profile extends Block {
         </div>
     </div>
     <div class="profile__settings">
-      {{#Button type="settings-button"}}settings{{/Button}}
+      {{#Button type="settings-button" onClick=onClick}}settings{{/Button}}
     </div>
 </div>
     `;

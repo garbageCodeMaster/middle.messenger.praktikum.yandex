@@ -1,8 +1,8 @@
 @use "/src/styles/variables.scss" as var;
 
 .card {
-  position: relative;
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   max-width: 340px;
@@ -10,9 +10,11 @@
   background-color: var.$white;
   border-radius: 12px;
   box-shadow: 0 0 6px rgb(0 0 0 / 14%);
+  margin: auto;
 
   &__header {
     margin: 0;
+    text-align: center;
 
     &--red {
       color: var.$red;
@@ -34,6 +36,7 @@
   &-form {
     min-height: auto;
   }
+  
 }
 
 .like-link {
@@ -68,11 +71,19 @@
   display: none;
 
   &--top {
-    top: -185;
+    top: -170;
+  }
+
+  &--bottom {
+    top: -30;
+    right: 0;
   }
 
   &--middle {
     top: 25%;
+    right: 0;
+    bottom: 0;
+    left: 0;
 
     &::before {
       position: fixed;

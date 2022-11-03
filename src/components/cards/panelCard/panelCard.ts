@@ -7,15 +7,14 @@ import mapmarkerUrl from 'icons/map-marker.svg';
 import '../card.scss';
 
 interface PanelCardProps {
-    ref?: string;
     error?: string;
 }
 
 export class PanelCard extends Block {
   static componentName = 'PanelCard';
 
-  constructor({ error, ref }: PanelCardProps) {
-    super({ error, ref });
+  constructor({ error}: PanelCardProps) {
+    super({ error });
 
     this.setProps({
       onPhoto: () => {

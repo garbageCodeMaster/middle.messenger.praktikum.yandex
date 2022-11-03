@@ -1,20 +1,33 @@
-import Block from 'core/Block';
+import { PathRouter, Store, Block } from 'core';
+import AuthService from 'services/auth';
+import UserService from 'services/user';
+import { withStore, withRouter, withIsLoading } from 'utils';
 import { getMyData } from 'utils/fakeData/getMyData';
 
 import './about.scss';
 
+interface AboutProps {
+  router: PathRouter;
+  store: Store<AppState>;
+  isLoading: boolean;
+  onToggleAppLoading?: () => void;
+  onNavigateNext?: () => void;
+};
+
 export class AboutPage extends Block {
   static componentName = 'AboutPage';
 
-  constructor() {
+  constructor(props: AboutProps) {
     const noEdit = true;
     const disabled = true;
-    const fields = getMyData();
+    const fields = getMyData(window.store.getState().user as User);
 
-    super({ noEdit, disabled, fields });
+    super({ ...props, noEdit, disabled, fields });
 
     this.setProps({
+      onExit: this.onExit.bind(this),
       onDataChange: () => {
+        console.log(this.refs)
         Object.values(this.refs.InputsList.refs).forEach((field) => {
           field.refs.input.setProps({ ...(field.refs.input.getContent() as HTMLInputElement), disabled: false });
         });
@@ -30,26 +43,31 @@ export class AboutPage extends Block {
         this.refs.ButtonsList.setProps({
           noEdit: false,
         });
+
+        this.setState({ action: UserService.editData });
       },
       onPasswordChange: () => {
         const fields = [
           {
-            key: 'old password',
+            key: 'oldPassword',
             value: '',
             ref: 'oldPassword',
             type: 'password',
+            fieldValue: 'old password',
           },
           {
-            key: 'new password',
+            key: 'newPassword',
             value: '',
-            ref: 'oldPassword',
+            ref: 'newPassword',
             type: 'password',
+            fieldValue: 'new password',
           },
           {
-            key: 'repeat new password',
+            key: 'repeatNewPassword',
             value: '',
             ref: 'repeatPassword',
             type: 'password',
+            fieldValue: 'repeat new password',
           },
         ];
 
@@ -58,6 +76,8 @@ export class AboutPage extends Block {
         this.refs.ButtonsList.setProps({
           noEdit: false,
         });
+
+        this.setState({ action: UserService.editPassword });
       },
       onSubmit: () => {
         const inputValue = {} as Record<string, unknown>;
@@ -71,40 +91,47 @@ export class AboutPage extends Block {
             value: inputValue.email,
             ref: 'emailField',
             type: 'email',
+            fieldValue: 'email',
           },
           {
             key: 'login',
             value: inputValue.login,
             ref: 'loginField',
             type: 'text',
+            fieldValue: 'login',
           },
           {
-            key: 'name',
-            value: inputValue.name,
+            key: 'first_name',
+            value: inputValue.first_name,
             ref: 'nameField',
             type: 'text',
+            fieldValue: 'name',
           },
           {
-            key: 'lastname',
-            value: inputValue.lastname,
+            key: 'second_name',
+            value: inputValue.second_name,
             ref: 'valueField',
             type: 'text',
+            fieldValue: 'lastname',
           },
           {
-            key: 'username',
-            value: inputValue.username,
+            key: 'display_name',
+            value: inputValue.display_name,
             ref: 'usernameField',
             type: 'text',
+            fieldValue: 'username',
           },
           {
             key: 'phone',
             value: inputValue.phone,
             ref: 'phoneField',
             type: 'text',
+            fieldValue: 'phone',
           },
         ];
 
         this.refs.InputsList.setProps({ fields, disabled: true });
+        
         this.refs.AvatarRef.setProps({
           events: {
             click: () => {},
@@ -114,11 +141,17 @@ export class AboutPage extends Block {
         this.refs.ButtonsList.setProps({
           noEdit: true,
         });
+
+        this.props.store.dispatch(this.state.action, inputValue);
       },
       onCardSubmit: () => {
         this.refs.UploadCard.hide();
       },
     });
+  }
+
+  onExit() {
+    window.store.dispatch(AuthService.logout);
   }
 
   render() {
@@ -159,3 +192,5 @@ export class AboutPage extends Block {
     `;
   }
 }
+
+export default withRouter(withStore(withIsLoading(AboutPage)));

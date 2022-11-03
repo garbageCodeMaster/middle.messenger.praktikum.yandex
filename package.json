@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "parcel src/pages/**/*.html --no-cache",
-    "build": "parcel build src/pages/**/*.html --no-source-maps --no-cache",
+    "dev": "parcel src/index.html --no-cache",
+    "build": "parcel build src/index.html --no-source-maps --no-cache",
     "start": "npm run build && node ./server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint:es": "eslint . --fix",
@@ -12,12 +12,14 @@
   },
   "alias": {
     "core": "./src/core",
+    "api": "./src/api",
     "components": "./src/components",
     "pages": "./src/pages",
     "utils": "./src/utils",
     "helpers": "./src/helpers",
     "layouts": "./src/layouts",
-    "icons": "./static/icons"
+    "icons": "./static/icons",
+    "services": "./src/services"
   },
   "keywords": [],
   "author": "",

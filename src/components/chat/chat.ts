@@ -4,13 +4,16 @@ import './chat.scss';
 
 interface ChatProps {
   id: number;
-  username: string;
-  lastMessage: string;
-  lastMessageTime: string;
-  unreadMessages: number | 0;
+  title: string;
   avatar: string | null;
+  unreadCount: number;
+  lastMessage: {
+    user: User,
+    time: string | Date,
+    content: string,
+  } | null;
   onClick: (B: Block) => boolean;
-  selected: true;
+  selected: boolean;
 }
 
 export class Chat extends Block {
@@ -42,14 +45,14 @@ export class Chat extends Block {
 
     <div class="chat__content">
         <div class="chat__content-name">
-            {{chat.username}}
+            {{chat.title}}
         </div>
         <div class="chat__content-text">
-            {{chat.lastMessage}}
+            {{chat.lastMessage.content}}
         </div>
     </div>
     <div class="chat__time">
-        {{chat.lastMessageTime}}
+        {{chat.lastMessage.time}}
     </div>
 </li>
     `;

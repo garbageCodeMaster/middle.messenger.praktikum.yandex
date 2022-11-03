@@ -1,13 +1,24 @@
-import Block from 'core/Block';
+import { PathRouter, Store, Block } from 'core';
+import AuthService from 'services/auth';
+import ChatService from 'services/chat';
+import { withIsLoading, withStore, withRouter } from 'utils';
 import { validateForm, ValidateType } from 'utils';
 
 import './login.scss';
 
+interface LoginProps {
+  router: PathRouter;
+  store: Store<AppState>;
+  isLoading: boolean;
+  onToggleAppLoading?: () => void;
+  onNavigateNext?: () => void;
+};
+
 export class LoginPage extends Block {
   static componentName = 'LoginPage';
 
-  constructor() {
-    super();
+  constructor(props: LoginProps) {
+    super(props);
   }
 
   protected getStateFromProps() {
@@ -29,6 +40,8 @@ export class LoginPage extends Block {
         this.refs.loginComponent.refs.errorRef.setProps({ textError: errorMessage[ValidateType.Login] });
 
         console.log('action/login', validateData[0].inputValue, validateData[1].inputValue);
+        this.props.store.dispatch(AuthService.login, {"login": validateData[0].inputValue, "password": validateData[1].inputValue});
+        //this.props.store.dispatch(ChatService.getChats);
       },
     });
   }
@@ -76,3 +89,5 @@ export class LoginPage extends Block {
     `;
   }
 }
+
+export default withRouter(withStore(withIsLoading(LoginPage)));

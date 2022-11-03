@@ -1,40 +1,46 @@
-export function getMyData() {
+export function getMyData(user: User) {
   const data = [
     {
       key: 'email',
-      value: 'dfifdgh@fijgf.tu',
+      value: user.email || '',
       ref: 'emailField',
       type: 'email',
+      fieldValue: 'email',
     },
     {
       key: 'login',
-      value: 'qqqq',
+      value: user.login || '',
       ref: 'loginField',
       type: 'text',
+      fieldValue: 'login',
     },
     {
-      key: 'name',
-      value: 'sadsdsdf',
+      key: 'first_name',
+      value: user.firstName || '',
       ref: 'nameField',
       type: 'text',
+      fieldValue: 'name',
     },
     {
-      key: 'lastname',
-      value: 'nbmbn',
+      key: 'second_name',
+      value: user.secondName || '',
       ref: 'valueField',
       type: 'text',
+      fieldValue: 'lastname',
     },
     {
-      key: 'username',
-      value: 'qqqq',
+      key: 'display_name',
+      value: user.displayName || '',
       ref: 'usernameField',
       type: 'text',
+      fieldValue: 'username',
     },
     {
       key: 'phone',
-      value: '84563723833',
+      value: user.phone || '',
       ref: 'phoneField',
       type: 'text',
+      fieldValue: 'phone',
     },
   ];
 

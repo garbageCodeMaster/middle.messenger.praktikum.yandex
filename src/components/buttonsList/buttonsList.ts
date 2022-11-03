@@ -5,7 +5,7 @@ interface ButtonsListProps {
   class?: string;
   onDataChange?: string;
   onPasswordChange?: string;
-  onExit?: string;
+  onExit?: () => void;
   onSubmit?: string;
 }
 
@@ -13,7 +13,7 @@ export class ButtonsList extends Block {
   static componentName = 'ButtonsList';
 
   constructor(props: ButtonsListProps) {
-    super({ ...props });
+    super(props);
   }
 
   protected render(): string {

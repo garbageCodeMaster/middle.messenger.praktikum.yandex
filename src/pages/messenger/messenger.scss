@@ -24,6 +24,7 @@
 }
 
 .chat-content {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -118,6 +119,7 @@
 
 .search {
   margin: 10px 0 0;
+  display: flex;
 
   &__input {
     width: 100%;

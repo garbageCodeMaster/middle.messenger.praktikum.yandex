@@ -1,15 +1,26 @@
-import Block from 'core/Block';
+import { PathRouter, Store, Block } from 'core';
+import AuthService from 'services/auth';
+import { withIsLoading, withStore, withRouter } from 'utils';
 import { validateForm, ValidateType } from 'utils';
 
 import './register.scss';
 
+interface RegisterProps {
+  router: PathRouter;
+  store: Store<AppState>;
+  isLoading: boolean;
+  onToggleAppLoading?: () => void;
+  onNavigateNext?: () => void;
+};
+
 export class RegisterPage extends Block {
   static componentName = 'RegisterPage';
 
-  constructor() {
-    super();
+  constructor(props: RegisterProps) {
+    super(props);
 
     this.setProps({
+      onNavigateNext: () => this.onNavigateNext(),
       onLogin: () => {
         const validateData = [
           {
@@ -71,8 +82,20 @@ export class RegisterPage extends Block {
         inputs.forEach((error) => error.input.refs.errorRef.setProps({ textError: errorMessage[error.inputType] }));
 
         console.log('action/register', validateData[0].inputValue, validateData[1].inputValue, validateData[2].inputValue, validateData[3].inputValue, validateData[4].inputValue, validateData[5].inputValue);
+        window.store.dispatch(AuthService.register, { 
+          login: validateData[0].inputValue, 
+          password: validateData[1].inputValue, 
+          email: validateData[3].inputValue, 
+          first_name: validateData[4].inputValue, 
+          second_name: validateData[4].inputValue, 
+          phone: validateData[5].inputValue 
+        });
       },
     });
+  }
+
+  onNavigateNext() {
+    this.props.router.go('/login');
   }
 
   render() {
@@ -148,10 +171,7 @@ export class RegisterPage extends Block {
               <div class="button-list">
                 {{#Button type="action-button" onClick=onLogin}}Register{{/Button}}
 
-                {{{Link
-                  to="/login"
-                  text="Already have an account?"
-                }}}
+                {{#Button onClick=onNavigateNext}}Already have an account?{{/Button}}
               </div>
             </form>
           </div>
@@ -160,3 +180,5 @@ export class RegisterPage extends Block {
     `;
   }
 }
+
+export default withRouter(withStore(withIsLoading(RegisterPage)));

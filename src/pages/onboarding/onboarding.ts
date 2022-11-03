@@ -1,4 +1,5 @@
 import Block from 'core/Block';
+import { withUser, withStore, withRouter } from 'utils';
 
 import './onboarding.scss';
 
@@ -29,3 +30,5 @@ export class OnboardingPage extends Block {
     `;
   }
 }
+
+//export default withRouter(withStore(withUser(OnboardingPage)));

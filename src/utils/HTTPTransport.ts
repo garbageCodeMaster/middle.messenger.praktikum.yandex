@@ -1,3 +1,5 @@
+import { API_URL } from 'api/types';
+
 enum METHODS {
   GET = 'GET',
   POST = 'POST',
@@ -19,44 +21,52 @@ function queryStringify(data: RequestData) {
   if (!data) {
     return '';
   }
-  return Object.entries(data).reduce(
-    (acc, [key, value], index, arr) =>
-      `${acc}${key}=${value}${index < arr.length - 1 ? '&' : ''}`,
-    '?'
-  );
+  return '?' + Object
+    .entries(data)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
 }
 
 export class HTTPTransport {
+  private _apiURL = API_URL;
+
   public get = (url: string, options = {}) =>
-    this.request(url, { ...options, method: METHODS.GET });
+    this.request(`${this._apiURL}${url}`, { ...options, method: METHODS.GET });
 
   public post = (url: string, options = {}) =>
-    this.request(url, { ...options, method: METHODS.POST });
+    this.request(`${this._apiURL}${url}`, { ...options, method: METHODS.POST });
 
   public put = (url: string, options = {}) =>
-    this.request(url, { ...options, method: METHODS.PUT });
+    this.request(`${this._apiURL}${url}`, { ...options, method: METHODS.PUT });
 
-  public patch = (url: string, options = {}) => {
-    return this.request(url, { ...options, method: METHODS.PATCH });
-  };
+  public patch = (url: string, options = {}) => 
+    this.request(`${this._apiURL}${url}`, { ...options, method: METHODS.PATCH });
 
   public delete = (url: string, options = {}) =>
-    this.request(url, { ...options, method: METHODS.DELETE });
+    this.request(`${this._apiURL}${url}`, { ...options, method: METHODS.DELETE });
 
   private request = (url: string, options: RequestOptions) => {
-    const { method = METHODS.GET, headers = {}, data, timeout = 5000 } = options;
+    const { method = METHODS.GET, headers = { "Content-Type": "application/json" }, data, timeout = 5000 } = options;
 
     const query = method === METHODS.GET ? queryStringify(data as RequestData) : '';
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-
+      
       xhr.open(method, `${url}${query}`);
 
       Object.entries(headers).forEach(([key, value]) => xhr.setRequestHeader(key, value));
 
-      xhr.onload = () => (xhr.status >= 300 ? reject(xhr) : resolve(xhr));
+      xhr.onload = () => {
+        try {
+          resolve(JSON.parse(xhr.response));
+        }
+        catch {
+          resolve(xhr.response);
+        }
+      }
 
+      xhr.withCredentials = true;
       xhr.onabort = reject;
       xhr.onerror = reject;
       xhr.timeout = timeout;

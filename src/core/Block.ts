@@ -15,12 +15,18 @@ interface BlockProps {
   events?: BlockEvents;
 }
 
-export default class Block<P extends BlockProps = Record<string, unknown>> {
+export interface BlockClass<P> extends Function {
+  new (props: P): Block<BlockProps>;
+  componentName?: string;
+}
+
+export default class Block<P = any> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
     FLOW_RENDER: 'flow:render',
+    FLOW_CWU: 'flow:component-will-unmount',
   } as const;
 
   static componentName: string;
@@ -48,7 +54,7 @@ export default class Block<P extends BlockProps = Record<string, unknown>> {
       props,
     };
 
-    this.getStateFromProps(props);
+    this.getStateFromProps();
 
     this._props = this._makePropsProxy(props || {} as P);
     this.state = this._makePropsProxy(this.state);
@@ -60,13 +66,32 @@ export default class Block<P extends BlockProps = Record<string, unknown>> {
     eventBus.emit(Block.EVENTS.INIT, this._props);
   }
 
+  _checkInDom() {
+    const elementInDOM = document.body.contains(this._element);
+
+    if (elementInDOM) {
+      setTimeout(() => this._checkInDom(), 1000);
+      return;
+    }
+
+    this.eventBus().emit(Block.EVENTS.FLOW_CWU, this.props);
+  }
+
   _registerEvents(eventBus: EventBus<Events>) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_CWU, this._componentWillUnmount.bind(this));
   }
 
+  _componentWillUnmount() {
+    this.eventBus().destroy();
+    this.componentWillUnmount();
+  }
+
+  componentWillUnmount() {}
+  
   _createResources() {
     this._element = this._createDocumentElement('div');
   }

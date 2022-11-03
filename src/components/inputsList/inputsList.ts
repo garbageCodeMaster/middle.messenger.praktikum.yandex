@@ -18,6 +18,7 @@ export class InputsList extends Block {
         {{#each fields}}
             {{{Field
               key=key
+              name=fieldValue
               value=value
               class="input-inline"
               type=type

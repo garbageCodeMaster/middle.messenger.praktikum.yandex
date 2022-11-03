@@ -2,6 +2,7 @@ import Block from 'core/Block';
 
 import messageUrl from 'icons/message-circle.svg';
 import paperclipUrl from 'icons/paperclip.svg';
+import ChatService from 'services/chat';
 
 export class ChatForm extends Block {
   static componentName = 'ChatForm';
@@ -14,12 +15,14 @@ export class ChatForm extends Block {
         this.refs.panelCard.show();
       },
       onSubmit: () => {
-        const message = (this.refs.input.getContent() as HTMLInputElement).value;
+        const message = (this.refs.input.getContent() as HTMLInputElement).value.trim();
 
-        if (message.trim()) {
+        if (message) {
           this.refs.input.setProps({});
           console.log(message);
+          window.store.dispatch(ChatService.sendMessage, message);
         }
+
       },
     });
   }

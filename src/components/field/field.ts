@@ -6,6 +6,7 @@ interface FieldProps {
   key: string;
   value: string;
   type?: string;
+  name?: string;
   disabled?: boolean;
 }
 
@@ -13,10 +14,10 @@ export class Field extends Block {
   static componentName = 'Field';
 
   constructor({
-    key, value, type, disabled,
+    name, key, value, type, disabled,
   }: FieldProps) {
     super({
-      key, value, type, disabled,
+      name, key, value, type, disabled,
     });
   }
 
@@ -24,7 +25,7 @@ export class Field extends Block {
     return `
     <div class="field">
         <div class="field__key">
-            {{key}}
+            {{name}}
         </div>
         <div class="field__value">
             {{{Input

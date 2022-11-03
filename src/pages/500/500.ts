@@ -1,4 +1,5 @@
 import Block from 'core/Block';
+import { withUser, withStore, withRouter } from 'utils';
 
 export class Page500 extends Block {
   static componentName = 'Page404';
@@ -23,3 +24,5 @@ export class Page500 extends Block {
     `;
   }
 }
+
+export default withRouter(withStore(withUser(Page500)));
