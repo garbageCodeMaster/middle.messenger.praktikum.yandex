@@ -38,17 +38,27 @@ export class MessengerPage extends Block {
     
     this.refs.chatList.setProps({ onUpdate: this.chatContentUpdate.bind(this) });
   }
+//select пропадает нужно в пропсах прокидывать заново в onSearchInput
 
-  chatContentUpdate(props: any) {
-    const chats = window.store.getState().chats;
-    const messages = chats.find((chat: Chat) => chat.id === props.id)!.messages;
-    console.log("0000000000000", chats, messages)
-    this.refs.chatContent.setProps({
-      messages,
-      activeChat: true,
-      username: props.displayName,
-      status: props.status,
-    });
+  chatContentUpdate(selectedChat: any) {
+    debugger;
+    if (selectedChat) {
+      const chats = window.store.getState().chats;
+      const messages = chats.find((chat: Chat) => chat.id === selectedChat.id);
+      console.log("0000000000000", chats, messages, selectedChat)
+      this.refs.chatContent.setProps({
+        messages: messages?.messages,
+        activeChat: selectedChat.selected,
+        chatId: selectedChat.id,
+        username: selectedChat.displayName,
+        status: selectedChat.status,
+      });
+    }
+    else {
+      this.refs.chatContent.setProps({
+        activeChat: false,
+      });
+    }
   }
 
   onNavigateMyProfile() {
@@ -59,9 +69,8 @@ export class MessengerPage extends Block {
     }
   }
 
-  onClick() {
-    console.log( this.refs.chatContent.refs)
-    this.refs.chatContent.refs.chatCard.show();
+  onClick(event: MouseEvent) {
+    this.refs.chatContent.refs.chatCard.showModal(event.target);
   }
 
   onAdd() {
@@ -69,11 +78,12 @@ export class MessengerPage extends Block {
     //console.log(ChatService.searchUser(search));
     if (search) {
       window.store.dispatch(ChatService.addChat, search);
+      this.refs.input.setProps({});
     }
   }
 
   render() {
-    console.log("@@@@mes@@@@ render")
+    console.log("@@@@mes@@@@ render", this.refs)
     return `
       {{#Layout}}
         <main class="messenger">

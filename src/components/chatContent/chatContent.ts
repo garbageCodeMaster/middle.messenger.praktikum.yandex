@@ -1,8 +1,10 @@
 import Block from 'core/Block';
+import ChatService from 'services/chat';
 
 interface ChatContentProps {
   messages?: Record<string, unknown>;
   activeChat?: boolean;
+  chatId?: number;
   status?: string;
 
   onClick?: () => void;
@@ -17,6 +19,7 @@ export class ChatContent extends Block {
     this.setProps({
       onAdd: this.onAdd.bind(this),
       onDelete: this.onDelete.bind(this),
+      onDeleteChat: this.onDeleteChat.bind(this),
     });
   }
 
@@ -32,60 +35,71 @@ export class ChatContent extends Block {
 
   onAdd = () => {
     console.log('add');
-    this.refs.managmentCard.setProps({add: true});
-    this.refs.chatCard.hide();
+    this.refs.managmentCard.setProps({add: true, chatId: this.props.chatId});
     this.refs.managmentCard.show();
   }
 
   onDelete = () => {
     console.log('delete');
-    this.refs.managmentCard.setProps({add: false});
-    this.refs.chatCard.hide();
+    this.refs.managmentCard.setProps({add: false, chatId: this.props.chatId});
     this.refs.managmentCard.show();
   }
 
+  onDeleteChat = () => {
+    console.log('delete');
+    //this. = null;
+    window.store.dispatch(ChatService.deleteChat);
+  }
+
   render() {
-    console.log("@@@@chat@@@@ render")
-    return `
-<div class="chat-content">
-    {{#unless activeChat}}
-        <div class="nothing">Nothing yet</div>
-    {{else}}
-        <div class="chat-content__header">
-          {{{Profile
-            ref="Profile"
-            username=title
-            status=status
-            onClick=onClick
+    console.log("@@@@chat@@@@ render",this.props )
+
+    if (!this.props.activeChat) {
+      return `
+        <div class="chat-content">
+          <div class="nothing">Nothing yet</div>
+        </div>
+      `;
+    }
+    else {
+      return `
+        <div class="chat-content">
+          <div class="chat-content__header">
+            {{{Profile
+              ref="Profile"
+              username=title
+              status=status
+              onClick=onClick
+            }}}
+
+            <div style="position: relative">
+              {{{ChatCard
+                ref="chatCard"
+                onAdd=onAdd
+                onDelete=onDelete
+                onDeleteChat=onDeleteChat
+              }}}
+
+            </div> 
+          </div>
+
+          <div class="chat-content__chat scrollbar">
+            {{#each messages}}
+              {{{Message
+                message=content
+                user_id=user_id
+                time=time
+              }}}
+            {{/each}}
+          </div>
+
+          {{{ChatForm}}}
+
+          {{{ManagmentCard
+              ref="managmentCard"
           }}}
-
-          <div style="position: relative">
-            {{{ChatCard
-              ref="chatCard"
-              onAdd=onAdd
-              onDelete=onDelete
-            }}}
-
-          </div> 
         </div>
-
-        <div class="chat-content__chat scrollbar">
-          {{#each messages}}
-            {{{Message
-              message=content
-              type="{{type}}"
-              time=time
-            }}}
-          {{/each}}
-        </div>
-
-        {{{ChatForm}}}
-
-        {{{ManagmentCard
-            ref="managmentCard"
-        }}}
-    {{/unless}}
-</div>
-    `;
+          `;
+    }
   }
 }

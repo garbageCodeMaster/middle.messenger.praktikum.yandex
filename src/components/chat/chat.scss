@@ -28,8 +28,9 @@
   }
 
   &__content {
-    width: 350px;
+   // width: 350px;
     margin-left: 15px;
+    flex: auto;
 
     &-name {
       font-weight: bold;

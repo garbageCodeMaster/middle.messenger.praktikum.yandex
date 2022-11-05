@@ -31,7 +31,7 @@ export class PanelCard extends Block {
 
   protected render(): string {
     return `
-        <div class="absolute absolute--top">
+        <div class="modal modal--top">
             <div class="card">
                 {{#Button type="managment-button" onClick=onPhoto}}
                     <img src=${imageUrl} alt="clip">

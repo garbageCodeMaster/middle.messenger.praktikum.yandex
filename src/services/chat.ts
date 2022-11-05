@@ -17,8 +17,10 @@ export class ChatService {
     this.getChats = this.getChats.bind(this); 
     this.getChat = this.getChat.bind(this); 
     this.addChat = this.addChat.bind(this);
+    this.deleteChat = this.deleteChat.bind(this);
     this.searchUser = this.searchUser.bind(this);
     this.addUsers = this.addUsers.bind(this);
+    this.deleteUser = this.deleteUser.bind(this);
     this.connectSocket = this.connectSocket.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
   }
@@ -51,11 +53,10 @@ export class ChatService {
       }
       console.log(response, id)
       const chat = [...response as ChatDTO[]];
-
+      //chat find  по id  ????
       chat.map((chat) => {
         if (chat.last_message) {
           const day = new Date(chat.last_message.time);
-          console.log(day)
           chat.last_message.time = formatDate(day);
         }
       });
@@ -84,7 +85,6 @@ export class ChatService {
       chats.map((chat) => {
         if (chat.last_message) {
           const day = new Date(chat.last_message.time);
-          console.log(day)
           chat.last_message.time = formatDate(day);
         }
       });
@@ -138,15 +138,12 @@ export class ChatService {
     }
 
     const chats = [...response as ChatDTO[]];
-    chats.map((chat) => {
-      if (chat.last_message) {
-        const day = new Date(chat.last_message.time);
-        console.log(day)
-        chat.last_message.time = day;
+      if (chats[0].last_message) {
+        const day = new Date(chats[0].last_message.time);
+        chats[0].last_message.time = formatDate(day);
       }
-    });
 
-    dispatch({ chats: transformChat(chats as ChatDTO[]) });
+    window.store.setChat(transformChat([chats[0]] as ChatDTO[]));
     
   } catch (error) {
     console.error(error);
@@ -156,13 +153,15 @@ export class ChatService {
   public async addUsers(
     dispatch: Dispatch<AppState>,
     state: AppState,
-    logins: string[], 
-    chatId: number,
+    data: {    
+      logins: string[], 
+      chatId: number,
+    }
   ): Promise<void> {
     try {
-        const users = []
+        const users = [];
       
-        for (const login of logins) {
+        for (const login of data.logins) {
           const user = await this.searchUser(login); 
 
           if (!user || user.length === 0) {
@@ -172,31 +171,15 @@ export class ChatService {
 
           users.push(user[0].id);
         }
-      
-        console.log(users);
-      // const users = await logins.reduce<Promise<UserDTO[]>>(async (result, login) => {
-      //   const user = await this.searchUser(login);
 
-      //   if (!user || user.length === 0) {
-      //     console.error(`No user with login: ${login}`);
-      //   }
-      //   else {
-      //     await result;
-      //   }
-
-      // }, Promise.resolve([]));
-      
-
-
-
-      const response = await this.api.addUsers(users, chatId);
+      const response = await this.api.addUsers(users, data.chatId);
 
       if (apiHasError(response)) {
         console.error(response.reason);
         return;
       } 
       
-      // this.getChat( );
+      //this.getChat();
     } 
     catch (error) {
       console.error(error);
@@ -207,7 +190,7 @@ export class ChatService {
     dispatch: Dispatch<AppState>,
     state: AppState,
     ids: {chatId: number, userId: number}
-    ) {
+    ): Promise<void> {
     try {
       console.log("connect socket")
       const { token } = await this.api.getToken(ids.chatId) as {token: string};
@@ -224,14 +207,12 @@ export class ChatService {
     dispatch: Dispatch<AppState>,
     state: AppState,
     message: string
-    ) {
+    ): Promise<void> {
     try {
-      console.log("call sendMessage")
       if (this.socket) {
         this.socket.sendMessage(message);
 
         if (this.curentChat) {
-          console.log(this.curentChat, 'diougndsoujfnjbinsfdjibnsudfnbpun')
           await this.getChat(this.curentChat);
         }
       }
@@ -239,50 +220,61 @@ export class ChatService {
       console.error(error);
     }
   }
+
+  public async deleteUser(
+    dispatch: Dispatch<AppState>,
+    state: AppState,
+    data: {    
+      login: string, 
+      chatId: number,
+    }
+  ): Promise<void> {
+    try {
+      const user = await this.searchUser(data.login);
+
+      if (apiHasError(user)) {
+        console.error(user.reason);
+        return;
+      }
+  
+      if (!user) return;
+      if (user.length === 0) {
+        console.error(`No user with login: ${data.login}`);
+        return;
+      }
+  
+      const result = await this.api.deleteUsers([user[0].id], data.chatId);
+      if (apiHasError(result)) {
+        console.error(result.reason);
+        return;
+      } 
+
+      this.getChat(data.chatId);
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  public async deleteChat(
+  dispatch: Dispatch<AppState>,
+  ): Promise<void>  {
+    try {
+      const chatId = window.store.getState().chats.find((chat: Chat) => chat.selected === true)?.id;
+      const result = await this.api.deleteChat(chatId as number);
+
+      if (apiHasError(result)) {
+        console.error(result.reason);
+      } 
+      else {
+        await this.getChats(dispatch);
+        window.store.setChat([]);
+
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
-
-
-
-
-// public async deleteUser(login: string, chatId: number) {
-//   try {
-//     const user = await this._profileService.searchUser(login);
-//     if (hasResponseError(user)) {
-//       console.error(user.reason);
-//       return;
-//     }
-
-//     if (!user) return;
-//     if (user.length === 0) {
-//       console.error(`Не найден пользователь с id ${login}`);
-//       return;
-//     }
-
-//     const result = await this._chatAPI.deleteUsers([user[0].id as unknown as number], chatId);
-//     if (hasResponseError(result)) {
-//       console.error(result.reason);
-//     } else {
-//       await this.getChats();
-//       closeModal('delete-user');
-//     }
-//   } catch (error) {
-//     console.error(error)
-//   }
-// }
-
-// public async deleteChat(id: number) {
-//   try {
-//     const result = await this._chatAPI.deleteChat(id);
-//     if (hasResponseError(result)) {
-//       console.error(result.reason);
-//     } else {
-//       await this.getChats();
-//       store.set('currentChat.chat', null);
-//       closeModal('delete-chat');
-//     }
-//   } catch (error) {
-//     console.error(error)
-//   }
-// }
 
 export default new ChatService();

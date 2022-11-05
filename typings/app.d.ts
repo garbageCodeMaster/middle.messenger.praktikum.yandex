@@ -36,6 +36,7 @@ declare global {
       content: string,
     } | null,
     messages?: any,
+    selected?: boolean,
   };
 }
 

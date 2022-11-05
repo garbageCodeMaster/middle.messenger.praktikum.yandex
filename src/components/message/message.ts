@@ -3,15 +3,24 @@ import Block from 'core/Block';
 import './message.scss';
 
 interface MessageProps {
-  type?: string;
   message?: string;
   time?: string;
+  user_id: number;
 }
 
 export class Message extends Block {
   static componentName = 'Message';
 
-  constructor({ type = 'outgoing', message, time }: MessageProps) {
+  constructor({ message, time, user_id }: MessageProps) {
+    let type;
+    console.log(user_id, window.store.getState().user!.id)
+    if (user_id === window.store.getState().user!.id) {
+      type = 'incoming';
+    }
+    else {
+      type = 'outgoing';
+    }
+    
     super({ type, message, time });
   }
 

@@ -41,7 +41,6 @@ export class LoginPage extends Block {
 
         console.log('action/login', validateData[0].inputValue, validateData[1].inputValue);
         this.props.store.dispatch(AuthService.login, {"login": validateData[0].inputValue, "password": validateData[1].inputValue});
-        //this.props.store.dispatch(ChatService.getChats);
       },
     });
   }

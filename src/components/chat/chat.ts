@@ -25,9 +25,7 @@ export class Chat extends Block {
       events: {
         click: () => {
           if (onClick) {
-            if (onClick(this)) {
-              this.setProps({ selected: true });
-            }
+            onClick(this.props.chat);
           }
         },
       },

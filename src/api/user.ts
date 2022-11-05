@@ -21,7 +21,7 @@ export default class UserAPI {
   private _request: HTTPTransport = new HTTPTransport();
 
   // public searchUser(login: string) {
-  //   return this._http.post<IProfile[] | ResponseError>(`/user/search`, {
+  //   return this._request.post(`/user/search`, {
   //     data: {login: login}
   //   });
   // }

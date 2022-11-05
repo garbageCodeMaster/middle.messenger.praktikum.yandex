@@ -1,6 +1,6 @@
 import { Block, Store } from 'core';
 import ChatService from 'services/chat';
-import { withStore } from 'utils';
+import { withStoreChat } from 'utils';
 
 interface ChatListProps {
   store: Store<AppState>;
@@ -16,47 +16,43 @@ export class ChatList extends Block {
   constructor({ chats, onUpdate }: ChatListProps) {
     super({ chats, onUpdate });
 
-    this.setState({ activeChat: '' });
+    this.setState({ chat: null });
     this.selectChat = this.selectChat.bind(this);
 
     this.setProps({ chats: chats.map((chat) => ({ ...chat, onClick: this.selectChat })) });
   }
 
-  selectChat(chat: Block) {
-    this.setState({chat: (chat.props.chat as Block)});
-    const chatId = (chat.props.chat as Block).id;
+  selectChat(chat: Chat) {
+    const chatInState = this.state.chat;
+    const chats = window.store.getState().chats;
+    
 
-    if (this.state.activeChat) {
-      if (chatId !== this.state.activeChat.props.chat.id) {
-        this.state.activeChat.setProps({ selected: false });
+    if (chatInState !== null) {
+      if (chat.id !== chatInState.id) {
+        chatInState.selected = false; 
       } else {
         return false;
       }
     }
 
-    const userId = window.store.getState().user?.id;
+    const userId = window.store.getState().user!.id;
 
-    if (chatId && userId) {
-      window.store.dispatch(ChatService.connectSocket, { userId, chatId });
+    if (chat.id && userId) {
+      window.store.dispatch(ChatService.connectSocket, { userId, chatId: chat.id }); 
     }
+  
+    chat.selected = true;
+    const {lastMessage: _, ...newChat} = chat;
+    this.setState({chat: newChat});
 
+    if (chatInState !== null)
+      window.store.setChat([chat, chatInState]);
+    else 
+      window.store.setChat([chat]);
     
-    console.log(this.props.onUpdate );
-    window.store.on('changed', this.__onChangeStoreCallback);
-    window.store.on('chatChanged', this.__onChangeStoreCallback2);
-    
-    this.setState({ activeChat: chat });
     return true;
   }
   
-  private __onChangeStoreCallback = () => {
-    (this.props.onUpdate as fun)(this.state.chat);
-  }
-  private __onChangeStoreCallback2 = () => {
-    const chats = window.store.getState().chats;
-    this.setProps({ chats: chats.map((chat) => ({ ...chat, onClick: this.selectChat })) });
-    console.log('???????????????????????//', this.state)
-  }
 
   render() {
     console.log("@@@@lsit@@@@ render")
@@ -70,4 +66,4 @@ export class ChatList extends Block {
   }
 }
 
-export default withStore(ChatList);
+export default withStoreChat(ChatList);

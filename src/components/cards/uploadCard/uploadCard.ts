@@ -17,7 +17,7 @@ export class UploadCard extends Block {
 
   protected render(): string {
     return `
-        <div class="absolute absolute--middle">
+        <div class="modal modal--middle">
             <div class="card">
                 <h3 class="card__header {{#if error}}card__header--red{{/if}}">
                     Upload the file

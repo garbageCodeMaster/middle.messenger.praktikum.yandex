@@ -1,10 +1,12 @@
 import Block from 'core/Block';
+import ChatService from 'services/chat';
 
 import '../card.scss';
 
 interface CardProps {
     error?: string;
     add?: boolean;
+    chatId?: number;
 }
 
 export class ManagmentCard extends Block {
@@ -15,11 +17,15 @@ export class ManagmentCard extends Block {
 
     this.setProps({
       onAdd: () => {
-        console.log('AAAAAAAAADD');
+        const login = (this.refs.input.getContent() as HTMLInputElement).value;
+        window.store.dispatch(ChatService.addUsers, {logins: [login], chatId: this.props.chatId});
+
         this.hide();
       },
       onDelete: () => {
-        console.log('DEEEEEELETE');
+        const login = (this.refs.input.getContent() as HTMLInputElement).value;
+        window.store.dispatch(ChatService.deleteUser, {login: login, chatId: this.props.chatId});
+
         this.hide();
       }
     });
@@ -27,7 +33,7 @@ export class ManagmentCard extends Block {
 
   protected render(): string {
     return `
-<div class="absolute absolute--middle">
+<div class="modal modal--middle">
     <div class="card">
         <h3 class="card__header">
             {{#if add}}
@@ -41,7 +47,13 @@ export class ManagmentCard extends Block {
             <div class="card__main">
                 <div class="input-list">
                     <div class="input">
-                        <input type="text" class="input__field" name="login" required/>
+                        {{{Input 
+                            name="login"
+                            type="text"
+                            class="input__field"
+                            ref="input"
+                        }}}
+
                         <label class="input__label">login</label>
                     </div>
                 </div>

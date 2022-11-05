@@ -1,4 +1,5 @@
-import { WEBSOCKET_URL } from './types';
+import { formatDate, transformChat } from 'utils';
+import { ChatDTO, WEBSOCKET_URL } from './types';
 
 export default class Socket {
   private _webSocket: WebSocket;
@@ -38,25 +39,31 @@ export default class Socket {
 
   private _onMessage(event: MessageEvent) {
     const data = JSON.parse(event.data);
-    let chats = Array.from(window.store.getState().chats);
+    let chats = window.store.getState().chats;
     let chat = chats.find(chat => this._chatId === chat.id);
-
-    console.log("onMessage", data)
 
     if (!chat) return;
     if (data.type !== 'user connected' &&
         data.type !== 'pong'
     ) {
-      if(Array.isArray(data)) {
-        chat.messages = data.reverse();
+      if (Array.isArray(data)) {
+        chat.messages = data.map((message) => {
+            const day = new Date(message.time);
+            message.time = formatDate(day);
+
+            return message;
+        }).reverse();
+        window.store.setChat(chats);
       }
       else {
+        const day = new Date(data.time);
+        data.time = formatDate(day);
         chat.messages.push(data);
-      }
-      window.store.setByPath('chats', chats)
-      console.log("onMessage22", window.store.getState().chats)
-    }
+        chat.lastMessage = data;
 
+        window.store.setChat([chat]);
+      }
+    }
   }
 
   private _getMessages(count: string = '0') {

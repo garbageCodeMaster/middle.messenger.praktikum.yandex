@@ -70,6 +70,7 @@ export default class Block<P = any> {
     const elementInDOM = document.body.contains(this._element);
 
     if (elementInDOM) {
+      //console.log("check", this)
       setTimeout(() => this._checkInDom(), 1000);
       return;
     }
@@ -107,6 +108,7 @@ export default class Block<P = any> {
 
   _componentDidMount(props: P) {
     this.componentDidMount(props);
+    this._checkInDom();
   }
 
   componentDidMount(props: P) {
@@ -278,4 +280,6 @@ export default class Block<P = any> {
   hide() {
     this.getContent().style.display = 'none';
   }
+
+  showModal(target: EventTarget | null) {}
 }

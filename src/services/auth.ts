@@ -2,7 +2,7 @@ import AuthAPI from 'api/auth';
 import ChatAPI from 'api/chat';
 import { UserDTO, ChatDTO } from 'api/types';
 import type { Dispatch } from 'core';
-import { transformUser, transformChat, apiHasError } from 'utils';
+import { transformUser, transformChat, apiHasError, formatDate } from 'utils';
 
 type LoginPayload = {
   login: string;
@@ -67,8 +67,7 @@ export class AuthService {
       chats.map((chat) => {
         if (chat.last_message) {
           const day = new Date(chat.last_message.time);
-          console.log(day)
-          chat.last_message.time = day;
+          chat.last_message.time = formatDate(day);
         }
       });
       
