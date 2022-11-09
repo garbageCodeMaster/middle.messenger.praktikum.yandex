@@ -1,0 +1,94 @@
+---
+styles:
+    - '../styles/styles.scss'
+    - '../styles/about.scss'
+    - '../styles/log.scss'
+    - '../partials/card/card.scss'
+---
+
+{{!< main}}
+
+<main class="about">
+    <div class="profile-picture profile-picture--gargantuan">
+        <img src="https://place-hold.it/107" class="profile-img" alt="profile picture">
+    </div>
+
+    <h2 class="about__name">dfdgfgd</h2>
+
+    <div class="about__info">
+        <div class="field">
+            <div class="field__key">
+                email
+            </div>
+            <div class="field__value">
+                34353@hfghfg.cob
+            </div>
+        </div>
+        <div class="field">
+            <div class="field__key">
+                login
+            </div>
+            <div class="field__value">
+                34hfghfb
+            </div>
+        </div>
+        <div class="field">
+            <div class="field__key">
+                name
+            </div>
+            <div class="field__value">
+                fghfg
+            </div>
+        </div>
+        <div class="field">
+            <div class="field__key">
+                lastname
+            </div>
+            <div class="field__value">
+                cob
+            </div>
+        </div>
+        <div class="field">
+            <div class="field__key">
+                chat name
+            </div>
+            <div class="field__value">
+                fghfg
+            </div>
+        </div>
+        <div class="field">
+            <div class="field__key">
+                phone
+            </div>
+            <div class="field__value">
+                +9584859
+            </div>
+        </div>
+    </div>
+
+    <div class="about__action">
+        <div class="field">
+            <a href="./about_change_info.hbs" class="effect-button">
+                change data
+            </a>
+        </div>
+        <div class="field">
+            <a href="./about_change_password.hbs" class="effect-button">
+                change password
+            </a>
+        </div>
+        <div class="field">
+            <a href="_blanck" class="effect-button effect-button--red">
+                exit
+            </a>
+        </div>
+    </div>
+</main>
+
+
+<div style="position: absolute; left: 0" >
+    {{> 'card/about/upload-card' header='Upload the file'}}
+    {{> 'card/about/upload-card' header='Upload the file' additional=true classAdditional="red"}}
+    {{> 'card/about/upload-card' header='error, please try again' classHeader="red"}}
+    {{> 'card/about/upload-card' header='file uploaded' main='file.jpg'}}
+</div>

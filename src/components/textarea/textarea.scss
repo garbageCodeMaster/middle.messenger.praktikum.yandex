@@ -1,0 +1,14 @@
+@use "/src/styles/variables.scss" as var;
+
+.textarea {
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: transparent;
+  border: none;
+  resize: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
