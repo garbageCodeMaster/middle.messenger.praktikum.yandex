@@ -120,6 +120,23 @@ export class ChatService {
           type: 'error' 
         }});
 
+        const response = await this.api.getChats();
+
+        if (apiHasError(response)) {
+          console.error(response.reason);
+          return;
+        }
+  
+        const chats = [...response as ChatDTO[]];
+          if (chats[0].last_message) {
+            const day = new Date(chats[0].last_message.time);
+            chats[0].last_message.time = formatDate(day);
+          }
+          const avatar = chats[0].avatar !== null ? API_URL+'resources'+chats[0].avatar : defaultAvatar;
+          chats[0].avatar = avatar;
+  
+        window.store.setChat(transformChat([chats[0]] as ChatDTO[]));
+
         return;
       }
 
