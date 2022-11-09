@@ -1,7 +1,6 @@
 import { PathRouter, Store, Block } from 'core';
 import AuthService from 'services/auth';
-import ChatService from 'services/chat';
-import { withIsLoading, withStore, withRouter } from 'utils';
+import { withStore, withRouter } from 'utils';
 import { validateForm, ValidateType } from 'utils';
 
 import './login.scss';
@@ -9,7 +8,6 @@ import './login.scss';
 interface LoginProps {
   router: PathRouter;
   store: Store<AppState>;
-  isLoading: boolean;
   onToggleAppLoading?: () => void;
   onNavigateNext?: () => void;
 };
@@ -99,4 +97,4 @@ export class LoginPage extends Block {
   }
 }
 
-export default withRouter(withStore(withIsLoading(LoginPage)));
+export default withRouter(withStore(LoginPage));

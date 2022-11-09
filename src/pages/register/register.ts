@@ -1,6 +1,6 @@
 import { PathRouter, Store, Block } from 'core';
 import AuthService from 'services/auth';
-import { withIsLoading, withStore, withRouter } from 'utils';
+import { withStore, withRouter } from 'utils';
 import { validateForm, ValidateType } from 'utils';
 
 import './register.scss';
@@ -8,7 +8,6 @@ import './register.scss';
 interface RegisterProps {
   router: PathRouter;
   store: Store<AppState>;
-  isLoading: boolean;
   onToggleAppLoading?: () => void;
   onNavigateNext?: () => void;
 };
@@ -181,4 +180,4 @@ export class RegisterPage extends Block {
   }
 }
 
-export default withRouter(withStore(withIsLoading(RegisterPage)));
+export default withRouter(withStore(RegisterPage));

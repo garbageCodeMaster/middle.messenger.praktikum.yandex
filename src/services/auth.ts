@@ -42,13 +42,14 @@ export class AuthService {
       const response = await this.api.login(data);
 
       if (apiHasError(response)) {
-        dispatch({ isLoading: false, loginFormError: response.reason });
+        window.store.setApiMessage({ apiMessage: {
+          message: `${response.reason}`,
+          type: 'error' 
+        }});
         return;
       }
 
       const responseUser = await this.api.me();
-
-      dispatch({ isLoading: false, loginFormError: null });
     
       if (apiHasError(responseUser)) {
         dispatch(this.logout);
@@ -94,13 +95,14 @@ export class AuthService {
       const response = await this.api.register(data);
 
       if (apiHasError(response)) {
-        dispatch({ isLoading: false, loginFormError: response.reason });
+        window.store.setApiMessage({ apiMessage: {
+          message: `${response.reason}`,
+          type: 'error' 
+        }});
         return;
       }
 
       const responseUser = await this.api.me();
-
-      dispatch({ isLoading: false, loginFormError: null });
       
       if (apiHasError(responseUser)) {
         dispatch(this.logout);
@@ -123,10 +125,9 @@ export class AuthService {
     try {
       const response = await this.api.me();
 
-      dispatch({isLoading: false, user: null });
+      dispatch({ user: null });
       
       if (apiHasError(response)) {
-        
         return;
       } 
       
@@ -144,16 +145,13 @@ export class AuthService {
     data: LoginPayload,
   ): Promise<void> {
     try {
-      dispatch({ isLoading: true });
-
       const response = await this.api.logout();
 
       if (apiHasError(response)) {
-        dispatch({ isLoading: false, loginFormError: response.reason });
         return;
       } 
 
-      dispatch({ isLoading: false, user: null, chats: []});
+      dispatch({ user: null, chats: []});
       window.router.go('/login');
     } 
     catch (error) {

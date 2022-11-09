@@ -1,11 +1,30 @@
+import { PathRouter } from 'core';
 import Block from 'core/Block';
-import { withUser, withStore, withRouter } from 'utils';
+import { withRouter } from 'utils';
+
+
+interface Page404Props {
+  router: PathRouter;
+  onNavigateNext?: () => void;
+};
 
 export class Page404 extends Block {
   static componentName = 'Page404';
 
-  constructor() {
-    super();
+  constructor(props: Page404Props) {
+    super(props);
+
+    this.setProps({
+      onNavigateNext: this.onNavigateNext.bind(this),
+    })
+  }
+
+  onNavigateNext() {
+    if (window.store.getState().user) {
+      this.props.router.go('/messenger');
+    } else {
+      this.props.router.go('/login');
+    }
   }
 
   render() {
@@ -19,10 +38,10 @@ export class Page404 extends Block {
           page not found...
       </h2>
 
-      <a href="" class="link">back to chats</a>
+      {{#Button type="link-button" onClick=onNavigateNext}}back to chats{{/Button}}
     </div>
     `;
   }
 }
 
-export default withRouter(withStore(withUser(Page404)));
+export default withRouter(Page404);

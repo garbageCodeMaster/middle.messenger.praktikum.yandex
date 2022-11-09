@@ -12,6 +12,7 @@
   &-raw {
     display: flex;
     position: relative;
+    justify-content: space-between;
     align-items: flex-start;
   }
 
@@ -55,7 +56,6 @@
   border: none;
   cursor: pointer;
 }
-
 
 .link {
   margin-top: 14px;

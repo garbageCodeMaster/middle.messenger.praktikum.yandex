@@ -1,11 +1,29 @@
 import Block from 'core/Block';
-import { withUser, withStore, withRouter } from 'utils';
+import { PathRouter } from 'core';
+import { withRouter } from 'utils';
+
+interface Page500Props {
+  router: PathRouter;
+  onNavigateNext?: () => void;
+};
 
 export class Page500 extends Block {
   static componentName = 'Page404';
 
-  constructor() {
-    super();
+  constructor(props: Page500Props) {
+    super(props);
+
+    this.setProps({
+      onNavigateNext: this.onNavigateNext.bind(this),
+    })
+  }
+
+  onNavigateNext() {
+    if (window.store.getState().user) {
+      this.props.router.go('/messenger');
+    } else {
+      this.props.router.go('/login');
+    }
   }
 
   render() {
@@ -19,10 +37,10 @@ export class Page500 extends Block {
           something went wrong...
       </h2>
 
-      <a href="./messenger.hbs" class="link">back to chats</a>
+      {{#Button type="link-button" onClick=onNavigateNext}}back to chats{{/Button}}
     </div>
     `;
   }
 }
 
-export default withRouter(withStore(withUser(Page500)));
+export default withRouter(Page500);
