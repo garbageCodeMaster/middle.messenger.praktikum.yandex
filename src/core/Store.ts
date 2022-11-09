@@ -1,6 +1,6 @@
 import EventBus from './EventBus';
-import {set} from 'utils/set'
-import { isEqual, merge } from 'utils';
+import { merge, set } from 'utils';
+import { AlertCard } from 'components';
 
 export type Dispatch<State> = (
   nextStateOrAction: Partial<State> | Action<State>,
@@ -36,7 +36,7 @@ export class Store<State extends Record<string, any>> extends EventBus {
         target[prop] = value;
 
         if (prop === 'chats') {
-          console.log("1111", target, window.store);
+          
         }
         
         return true;
@@ -88,15 +88,26 @@ export class Store<State extends Record<string, any>> extends EventBus {
     this.emit('changed', prevState, this.state);
   }
 
+  public setApiMessage(value: {apiMessage: {message: string, type: "success" | "error"}}) {
+    set(this.state, 'apiMessage', value);
+
+    const message = value.apiMessage.message;
+    const type = value.apiMessage.type;
+    const alert = new AlertCard({message, type});
+    document.body.prepend(alert.getContent());
+  }
+
+  public silentSet(nextState: Partial<State>) {
+    const prevState = { ...this.state };
+
+    this.state = { ...this.state, ...nextState };
+  }
+
   public set(nextState: Partial<State>) {
     const prevState = { ...this.state };
-    console.log('%cstore updated',
-    'background: #4444; color: #fff',
-    this.state, nextState, { ...this.state, ...nextState })
     this.state = { ...this.state, ...nextState };
 
     Object.assign(this.props, nextState);
-   // this.state = {...this.state, nextState};
     this.emit('changed', prevState, {...this.state, nextState});
   }
 
@@ -104,10 +115,6 @@ export class Store<State extends Record<string, any>> extends EventBus {
     if (typeof nextStateOrAction === 'function') {
       nextStateOrAction(this.dispatch.bind(this), this.state, payload);
     } else {
-      console.log('%cstore updated',
-      'background: #333; color: #000',
-      this.state, nextStateOrAction, { ...this.state, ...nextStateOrAction })
-
       this.set({  ...nextStateOrAction });
     }
   }

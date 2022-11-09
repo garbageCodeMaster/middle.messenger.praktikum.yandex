@@ -1,6 +1,4 @@
 export { validateForm, ValidateType, ValidateData } from './validateForm';
-export { getMessages } from './fakeData/getMessages';
-export { getChats } from './fakeData/getChats';
 export { withRouter} from './withRouter';
 export { withStore } from './withStore';
 export { withStoreChat } from './withStoreChat';

@@ -18,5 +18,7 @@ export { default as ButtonsList } from './buttonsList';
 export { default as InputsList } from './inputsList';
 export { default as PanelCard } from './cards/panelCard';
 export { default as UploadCard } from './cards/uploadCard';
+export { default as Label } from './label';
 export { default as ManagmentCard } from './cards/managmentCard';
 export { default as ChatCard } from './cards/chatCard';
+export { default as AlertCard } from './cards/alertCard';

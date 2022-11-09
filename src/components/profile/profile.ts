@@ -5,6 +5,7 @@ import './profile.scss';
 interface ProfileProps {
   username?: string;
   status?: string;
+  avatar?: string;
 
   onClick?: () => void;
 };
@@ -13,8 +14,8 @@ interface ProfileProps {
 export class Profile extends Block {
   static componentName = 'Profile';
 
-  constructor({ username, status, onClick}: ProfileProps) {
-    super({ username, status, onClick});
+  constructor({ username, status, avatar, onClick}: ProfileProps) {
+    super({ username, status, avatar, onClick});
   }
 
   protected render(): string {
@@ -24,7 +25,7 @@ export class Profile extends Block {
       {{{Avatar
         ref="AvatarRef"
         size="large"
-        src="https://place-hold.it/57"
+        src=avatar
         onClick=onAvatarClick 
       }}}
         <div class="profile-info">

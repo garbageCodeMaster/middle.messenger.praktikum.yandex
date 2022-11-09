@@ -47,7 +47,7 @@ export class HTTPTransport {
 
   private request = (url: string, options: RequestOptions) => {
     const { method = METHODS.GET, headers = { "Content-Type": "application/json" }, data, timeout = 5000 } = options;
-
+    
     const query = method === METHODS.GET ? queryStringify(data as RequestData) : '';
 
     return new Promise((resolve, reject) => {

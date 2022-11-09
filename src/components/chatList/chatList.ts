@@ -8,30 +8,31 @@ interface ChatListProps {
   onUpdate?: any;
 }
 
-type fun = (P: any) => void;
 
 export class ChatList extends Block {
   static componentName = 'ChatList';
-
+  
   constructor({ chats, onUpdate }: ChatListProps) {
     super({ chats, onUpdate });
 
     this.setState({ chat: null });
-    this.selectChat = this.selectChat.bind(this);
-
-    this.setProps({ chats: chats.map((chat) => ({ ...chat, onClick: this.selectChat })) });
+    this.setProps({ onClick: this.selectChat.bind(this) });
   }
 
+
   selectChat(chat: Chat) {
-    const chatInState = this.state.chat;
+    let chatInState = this.state.chat;
     const chats = window.store.getState().chats;
-    
 
     if (chatInState !== null) {
-      if (chat.id !== chatInState.id) {
-        chatInState.selected = false; 
+      if (!chats.find((chat: Chat) => chat.id === chatInState.id)) {
+        chatInState = null;
       } else {
-        return false;
+        if (chat.id !== chatInState.id) {
+          chatInState.selected = false; 
+        } else {
+          return false;
+        }
       }
     }
 
@@ -53,13 +54,11 @@ export class ChatList extends Block {
     return true;
   }
   
-
   render() {
-    console.log("@@@@lsit@@@@ render")
     return `
       <ul class="chat-menu__chats scrollbar">
         {{#each chats}}
-            {{{Chat chat=this onClick=this.onClick selected=selected}}}
+            {{{Chat chat=this onClick=../onClick selected=selected}}}
         {{/each}}
       </ul>
     `;

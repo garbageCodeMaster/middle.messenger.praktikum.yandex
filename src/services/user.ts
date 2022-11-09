@@ -2,6 +2,7 @@ import UserAPI from 'api/user';
 import { UserDTO } from 'api/types';
 import type { Dispatch } from 'core';
 import { transformUser, apiHasError } from 'utils';
+import AlertCard from 'components/cards/alertCard';
 
 type EditRequestData = {
   first_name: string,
@@ -9,7 +10,8 @@ type EditRequestData = {
   display_name: string,
   login: string,
   email: string,
-  phone: string
+  phone: string,
+  avatar?: any,
 };
 
 type PasswordRequestData = {
@@ -25,35 +27,33 @@ export class UserService {
 
     this.editData = this.editData.bind(this);
     this.editPassword = this.editPassword.bind(this);
+    this.uploadAvatar = this.uploadAvatar.bind(this);
   }
 
-  // public async searchUser(
-  //   dispatch: Dispatch<AppState>,
-  //   state: AppState,
-  //   data: EditRequestData,
-  //   ): Promise<void> {
-  //     try {
-  //       return await this.api.searchUser(data);
-  //     } 
-  //     catch (error) {
-  //       console.error(error);
-  //     }
-  // }
+  public async uploadAvatar(avatar: FormData) {
+    try {
+      const response = await this.api.uploadAvatar(avatar);
 
-  // public async uploadAvatar(avatar: data) {
-  //   try {
-  //     const response = await this.api.uploadAvatar(avatar);
+      if (apiHasError(response)) {
+        console.error(`Error: ${response.reason}`);
+        window.store.setApiMessage({ apiMessage: {
+          message: `Avatar wasn't uploaded. ${response.reason}`,
+          type: 'error'
+        }});
 
-  //     if (apiHasError(response)) {
-  //       console.error(`Error: ${response.reason}`);
-  //     } else {
-  //       store.set('currentUser.avatar', response.avatar);
-  //       closeModal('upload-avatar');
-  //     }
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
+        return;
+      } 
+
+      window.store.setByPath('user.avatar', response.avatar);
+      window.store.setApiMessage({ apiMessage: {
+        message: `Avatar was uploaded successfully`,
+        type: 'success' 
+      }});
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   public async editPassword(
     dispatch: Dispatch<AppState>,
@@ -65,9 +65,18 @@ export class UserService {
 
       if (apiHasError(response)) {
         console.error(`Error: ${response.reason}`);
+        window.store.setApiMessage({ apiMessage: {
+          message: `Password wasn't updated. ${response.reason}`,
+          type: 'error' 
+        }});
+
         return;
       } 
-      
+
+      window.store.setApiMessage({ apiMessage: {
+        message: `Password was changed successfully`,
+        type: 'success' 
+      }});
     } 
     catch (error) {
       console.error(error);

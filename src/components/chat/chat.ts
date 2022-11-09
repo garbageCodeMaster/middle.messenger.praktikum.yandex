@@ -33,12 +33,13 @@ export class Chat extends Block {
   }
 
   protected render(): string {
+    const avatar = this.props.chat.avatar;
     return `
 <li class="chat {{#if selected}}chat--active{{/if}}">
     {{{Avatar
       ref="AvatarRef"
-      size="middle"
-      src="https://place-hold.it/47" 
+      size="medium"
+      src="${avatar}"
     }}}
 
     <div class="chat__content">

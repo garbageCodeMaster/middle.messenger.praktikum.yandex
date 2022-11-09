@@ -1,4 +1,5 @@
 import Block from 'core/Block';
+import defaultAvatar from '/static/defaultAvatar/man.png';
 
 import './message.scss';
 
@@ -12,16 +13,17 @@ export class Message extends Block {
   static componentName = 'Message';
 
   constructor({ message, time, user_id }: MessageProps) {
-    let type;
-    console.log(user_id, window.store.getState().user!.id)
+    let type, avatar;
     if (user_id === window.store.getState().user!.id) {
       type = 'incoming';
+      avatar = defaultAvatar;
     }
     else {
       type = 'outgoing';
+      avatar = window.store.getState().user!.avatar;
     }
     
-    super({ type, message, time });
+    super({ type, message, time, avatar });
   }
 
   protected render(): string {
@@ -30,7 +32,7 @@ export class Message extends Block {
         {{{Avatar
           ref="AvatarRef"
           size="large"
-          src="https://place-hold.it/57"
+          src=avatar
           onClick=onClick 
         }}}
         <div class="message-wrapper">

@@ -1,8 +1,9 @@
 import ChatAPI from 'api/chat';
 import Socket from 'api/websoket';
-import { ChatDTO, UserDTO } from 'api/types';
+import { API_URL, ChatDTO, UserDTO } from 'api/types';
 import type { Dispatch } from 'core';
 import { transformChat, apiHasError, formatDate } from 'utils';
+import defaultAvatar from '/static/defaultAvatar/man.png'
 
 export class ChatService {
   private api: ChatAPI;
@@ -51,18 +52,19 @@ export class ChatService {
       if (apiHasError(response)) {
         return;
       }
-      console.log(response, id)
+
       const chat = [...response as ChatDTO[]];
-      //chat find  по id  ????
+
       chat.map((chat) => {
         if (chat.last_message) {
           const day = new Date(chat.last_message.time);
           chat.last_message.time = formatDate(day);
         }
+        const avatar = chat.avatar !== null ? API_URL+'resources'+chat.avatar : defaultAvatar;
+        chat.avatar = avatar;
       });
 
-      console.log("CHATS::::", chat)
-
+      
       window.store.setChat(transformChat(chat as ChatDTO[]));
     } 
     catch (error) {
@@ -87,9 +89,9 @@ export class ChatService {
           const day = new Date(chat.last_message.time);
           chat.last_message.time = formatDate(day);
         }
+        const avatar = chat.avatar !== null ? API_URL+'resources'+chat.avatar : defaultAvatar;
+        chat.avatar = avatar;
       });
-
-      console.log("CHATS::::", chats)
 
       dispatch({ chats: transformChat(chats as ChatDTO[]) });
     } 
@@ -103,51 +105,59 @@ export class ChatService {
     state: AppState,
     title: string,
   ): Promise<void> {
-  try {
-    const usersId = await this.api.searchUser(title) as UserDTO[];
+    try {
+      const usersId = await this.api.searchUser(title) as UserDTO[];
 
-    if (apiHasError(usersId)) {
-      console.error(usersId.reason);
-      return;
-    } 
+      if (apiHasError(usersId)) {
+        console.error(usersId.reason);
+        return;
+      } 
 
-    if (usersId.length === 0) {
-      console.error(`No user with login: ${title}`);
-      return;
-    }
+      if (usersId.length === 0) {
+        console.error(`No user with login: ${title}`);
+        window.store.setApiMessage({ apiMessage: {
+          message: `No user with login: ${title}`,
+          type: 'error' 
+        }});
 
-    const chatId = await this.api.addChat(title) as {id: number};
-
-    if (apiHasError(chatId)) {
-      console.error(chatId.reason);
-      return;
-    } 
-
-    const result = await this.api.addUsers([usersId[0].id] as number[], chatId.id as number);
-
-    if (apiHasError(result)) {
-      console.error(result.reason);
-      return;
-    } 
-
-    const response = await this.api.getChats();
-
-    if (apiHasError(response)) {
-      console.error(response.reason);
-      return;
-    }
-
-    const chats = [...response as ChatDTO[]];
-      if (chats[0].last_message) {
-        const day = new Date(chats[0].last_message.time);
-        chats[0].last_message.time = formatDate(day);
+        return;
       }
 
-    window.store.setChat(transformChat([chats[0]] as ChatDTO[]));
-    
-  } catch (error) {
-    console.error(error);
-  }
+      const chatId = await this.api.addChat(title) as {id: number};
+
+      if (apiHasError(chatId)) {
+        console.error(chatId.reason);
+        return;
+      } 
+
+      const result = await this.api.addUsers([usersId[0].id] as number[], chatId.id as number);
+
+      if (apiHasError(result)) {
+        console.error(result.reason);
+        return;
+      } 
+
+      const response = await this.api.getChats();
+
+      if (apiHasError(response)) {
+        console.error(response.reason);
+        return;
+      }
+
+      const chats = [...response as ChatDTO[]];
+        if (chats[0].last_message) {
+          const day = new Date(chats[0].last_message.time);
+          chats[0].last_message.time = formatDate(day);
+        }
+        const avatar = chats[0].avatar !== null ? API_URL+'resources'+chats[0].avatar : defaultAvatar;
+        chats[0].avatar = avatar;
+
+      window.store.setChat(transformChat([chats[0]] as ChatDTO[]));
+      
+    } 
+    catch (error) {
+      console.error(error);
+    }
   }
 
   public async addUsers(
@@ -166,6 +176,11 @@ export class ChatService {
 
           if (!user || user.length === 0) {
             console.error(`No user with login: ${login}`);
+            window.store.setApiMessage({ apiMessage: {
+              message: `No user with login: ${login}`,
+              type: 'error' 
+            }});
+
             continue;
           }
 
@@ -192,7 +207,6 @@ export class ChatService {
     ids: {chatId: number, userId: number}
     ): Promise<void> {
     try {
-      console.log("connect socket")
       const { token } = await this.api.getToken(ids.chatId) as {token: string};
 
       this.socket = new Socket(ids.userId, ids.chatId, token);
@@ -240,6 +254,11 @@ export class ChatService {
       if (!user) return;
       if (user.length === 0) {
         console.error(`No user with login: ${data.login}`);
+        window.store.setApiMessage({ apiMessage: {
+          message: `No user with login: ${data.login}`,
+          type: 'error' 
+        }});
+
         return;
       }
   
@@ -249,6 +268,10 @@ export class ChatService {
         return;
       } 
 
+      window.store.setApiMessage({ apiMessage: {
+        message: `User "${data.login}" was removed from chat`,
+        type: 'success' 
+      }});
       this.getChat(data.chatId);
 
     } catch (error) {
@@ -265,13 +288,14 @@ export class ChatService {
 
       if (apiHasError(result)) {
         console.error(result.reason);
+        return;
       } 
-      else {
+
         await this.getChats(dispatch);
         window.store.setChat([]);
 
-      }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error(error);
     }
   }

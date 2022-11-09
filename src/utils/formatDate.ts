@@ -1,38 +1,27 @@
-const enum Time {
-    Year = 31536000,
-    Month = 2592000,
-    Day = 86400,
-    Hour = 3600,
-    Minute = 60,
-}
+export function formatDate(date: string | Date): string {
+  if (typeof date === 'string') {
+    date = new Date(date);
+  }
+  
+  const now = new Date();
+  const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+  const mouth = months[date.getMonth()];
+  const day = date.getDate();
+  const memoizedHours = date.getHours();
+  const hours = memoizedHours >= 10 ? memoizedHours : `0${memoizedHours}`;
+  const memoizedMinutes = date.getMinutes();
+  const minutes = memoizedMinutes >= 10 ? memoizedMinutes : `0${memoizedMinutes}`;
+  const difference = now.getDate() - day;
 
-export function formatDate(date: Date) {
-    const seconds = Math.floor((Number(new Date()) - Number(date)) / 1000);
+  let dateString = `${day} ${mouth}`;
 
-    let interval = seconds / Time.Year;
-    if (interval > 1) {
-      return Math.floor(interval) + " years";
-    }
+  if (difference < 1) {
+    dateString = `${hours}:${minutes}`;
+  }
 
-    interval = seconds / Time.Month;
-    if (interval > 1) {
-      return Math.floor(interval) + " months";
-    }
+  if (difference === 1) {
+    dateString = 'yesterday';
+  }
 
-    interval = seconds / Time.Day;
-    if (interval > 1) {
-      return Math.floor(interval) + " days";
-    }
-
-    interval = seconds / Time.Hour;
-    if (interval > 1) {
-      return Math.floor(interval) + " hours";
-    }
-
-    interval = seconds / Time.Minute;
-    if (interval > 1) {
-      return Math.floor(interval) + " minutes";
-    }
-
-    return Math.floor(seconds) + " seconds";
+  return dateString;
 }

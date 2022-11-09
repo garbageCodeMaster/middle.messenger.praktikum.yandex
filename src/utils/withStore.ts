@@ -8,16 +8,10 @@ export function withStore<P extends WithStateProps>(WrappedBlock: BlockClass<P>)
     public static componentName = WrappedBlock.componentName || WrappedBlock.name;
 
     constructor(props: P) {
-      console.log("withStore");
       super({ ...props, store: window.store });
     }
 
     __onChangeStoreCallback = () => {
-      /**
-       * TODO: проверить что стор реально обновлен
-       * и прокидывать не целый стор, а необходимые поля
-       * с помощью метода mapStateToProps
-       */
       // @ts-expect-error this is not typed
       this.setProps({ ...this.props, store: window.store });
     }

@@ -19,7 +19,8 @@ export class MessengerPage extends Block {
   static componentName = 'MessegerPage';
 
   constructor(props: MessengerProps) {
-    let chats: Chat[] = window.store.getState().chats;
+    const chats: Chat[] = window.store.getState().chats;
+    chats.map(chat => chat.selected = false);
 
     super({...props, chats });
 
@@ -38,19 +39,17 @@ export class MessengerPage extends Block {
     
     this.refs.chatList.setProps({ onUpdate: this.chatContentUpdate.bind(this) });
   }
-//select пропадает нужно в пропсах прокидывать заново в onSearchInput
 
   chatContentUpdate(selectedChat: any) {
-    debugger;
     if (selectedChat) {
       const chats = window.store.getState().chats;
       const messages = chats.find((chat: Chat) => chat.id === selectedChat.id);
-      console.log("0000000000000", chats, messages, selectedChat)
       this.refs.chatContent.setProps({
+        avatar: selectedChat.avatar,
         messages: messages?.messages,
         activeChat: selectedChat.selected,
         chatId: selectedChat.id,
-        username: selectedChat.displayName,
+        title: selectedChat.title,
         status: selectedChat.status,
       });
     }
@@ -75,7 +74,7 @@ export class MessengerPage extends Block {
 
   onAdd() {
     const search = (this.refs.input.getContent() as HTMLInputElement).value;
-    //console.log(ChatService.searchUser(search));
+
     if (search) {
       window.store.dispatch(ChatService.addChat, search);
       this.refs.input.setProps({});
@@ -83,14 +82,16 @@ export class MessengerPage extends Block {
   }
 
   render() {
-    console.log("@@@@mes@@@@ render", this.refs)
+    const {avatar, displayName} = window.store.getState().user!;
+
     return `
       {{#Layout}}
         <main class="messenger">
             <div class="chat-menu">
                 <div class="chat-menu__header">
                   {{{Profile
-                    name="your profile name"
+                    avatar="${avatar}"
+                    username="${displayName}"
                     status="short info about you"
                     onClick=onNavigateMyProfile
                   }}}

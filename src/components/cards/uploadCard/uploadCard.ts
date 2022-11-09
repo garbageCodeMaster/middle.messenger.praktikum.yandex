@@ -4,33 +4,41 @@ import '../card.scss';
 
 interface UploadCardProps {
     ref?: string;
-    error?: string;
+    file?: string;
     onClick?: () => void;
+    onChange?: () => void;
 }
 
 export class UploadCard extends Block {
   static componentName = 'UploadCard';
 
-  constructor({ error, ref, onClick }: UploadCardProps) {
-    super({ error, ref, onClick });
+  constructor({ file, ref, onClick, onChange }: UploadCardProps) {
+    super({ file, ref, onClick, onChange });
   }
 
   protected render(): string {
     return `
         <div class="modal modal--middle">
-            <div class="card">
+            <div class="card card-column">
                 <h3 class="card__header {{#if error}}card__header--red{{/if}}">
                     Upload the file
                 </h3>
                 
                 <div class="card__main">
-                    {{#if file}}
-                        <div class="card__main-file">
-                            {{file}}
-                        </div>
-                    {{else}}
-                        {{#Button type="effect-button like-link"}}Choose from pc{{/Button}}
-                    {{/if}}
+                    {{{Label ref="file"}}}
+
+                    <div class="input__wrapper">
+                        {{{Input
+                            name="file" 
+                            type="file" 
+                            id="avatar" 
+                            class="input input__file" 
+                            onChange=onChange
+                        }}}
+                        <label for="avatar" class="input__file-button">
+                            <span class="effect-button like-link">Choose from pc</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="card__action">

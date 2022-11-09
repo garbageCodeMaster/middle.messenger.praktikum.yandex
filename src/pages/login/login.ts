@@ -19,6 +19,10 @@ export class LoginPage extends Block {
 
   constructor(props: LoginProps) {
     super(props);
+
+    this.setProps({
+      onNavigateNext: () => this.onNavigateNext(),
+    });
   }
 
   protected getStateFromProps() {
@@ -45,11 +49,15 @@ export class LoginPage extends Block {
     });
   }
 
+  onNavigateNext() {
+    this.props.router.go('/register');
+  }
+
   render() {
     return `
     {{#Layout}}
       <main class="home-page">
-        <div class="card">
+        <div class="card card-column">
           <form class="card-form">
             <div class="card__inputs">
               <div class="form-header">
@@ -78,8 +86,10 @@ export class LoginPage extends Block {
 
             </div>
 
-            <div class="card__button">      
+            <div class="button-list">      
               {{#Button type="action-button" onClick=onLogin}}Login{{/Button}}
+
+              {{#Button type="link link-button" onClick=onNavigateNext}}Don't have an account?{{/Button}}
             </div> 
           </form>
         </div>

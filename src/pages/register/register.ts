@@ -102,7 +102,7 @@ export class RegisterPage extends Block {
     return `
       {{#Layout}}
         <main class="home-page">
-          <div class="card">
+          <div class="card card-column">
             <form class="card-form">
               <div class="input-list">
                 <div class="form-header">
@@ -171,7 +171,7 @@ export class RegisterPage extends Block {
               <div class="button-list">
                 {{#Button type="action-button" onClick=onLogin}}Register{{/Button}}
 
-                {{#Button onClick=onNavigateNext}}Already have an account?{{/Button}}
+                {{#Button type="link link-button" onClick=onNavigateNext}}Already have an account?{{/Button}}
               </div>
             </form>
           </div>

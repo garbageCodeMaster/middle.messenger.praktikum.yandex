@@ -28,6 +28,10 @@ input {
   outline: none;
 }
 
+button {
+  background-color: transparent;
+}
+
 .error {
   display: flex;
   flex-direction: column;

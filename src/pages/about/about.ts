@@ -1,8 +1,8 @@
 import { PathRouter, Store, Block } from 'core';
 import AuthService from 'services/auth';
 import UserService from 'services/user';
-import { withStore, withRouter, withIsLoading } from 'utils';
-import { getMyData } from 'utils/fakeData/getMyData';
+import { withStore, withRouter, withIsLoading, validateForm, ValidateType } from 'utils';
+import { getMyData } from 'utils/getMyData';
 
 import './about.scss';
 
@@ -18,16 +18,19 @@ export class AboutPage extends Block {
   static componentName = 'AboutPage';
 
   constructor(props: AboutProps) {
+    const {user} = window.store.getState();
+ 
     const noEdit = true;
     const disabled = true;
-    const fields = getMyData(window.store.getState().user as User);
+    
+    const fields = getMyData(user as User);
+    const avatar = user!.avatar;
 
-    super({ ...props, noEdit, disabled, fields });
+    super({ ...props, noEdit, disabled, fields, avatar });
 
     this.setProps({
       onExit: this.onExit.bind(this),
       onDataChange: () => {
-        console.log(this.refs)
         Object.values(this.refs.InputsList.refs).forEach((field) => {
           field.refs.input.setProps({ ...(field.refs.input.getContent() as HTMLInputElement), disabled: false });
         });
@@ -130,7 +133,41 @@ export class AboutPage extends Block {
           },
         ];
 
-        this.refs.InputsList.setProps({ fields, disabled: true });
+        const validation = validateForm([
+          {
+            inputType: ValidateType.Login,
+            inputValue: inputValue.login as string,
+          },
+          {
+            inputType: ValidateType.Email,
+            inputValue: inputValue.email as string,
+          },
+          {
+            inputType: ValidateType.Name,
+            inputValue: inputValue.display_name as string,
+          },
+          {
+            inputType: ValidateType.Phone,
+            inputValue: inputValue.phone as string,
+          },
+          {
+            inputType: ValidateType.PasswordCheck,
+            inputValue: inputValue.repeatPassword as string,
+            inputValueCompare: inputValue.newPassword as string,
+          },
+        ]);
+
+        if (Object.values(validation).some((error: string) => error.length > 0)) {
+          window.store.setApiMessage({ apiMessage: {
+            message: `${Object.values(validation).join('')}`,
+            type: 'error' 
+          }});
+
+          return;
+        }
+
+
+        this.setProps({ fields, disabled: true });
         
         this.refs.AvatarRef.setProps({
           events: {
@@ -142,9 +179,29 @@ export class AboutPage extends Block {
           noEdit: true,
         });
 
+
         this.props.store.dispatch(this.state.action, inputValue);
       },
+      onFileSelected: (event: InputEvent) => {
+        const { files }: { files: FileList | null } = event.target as HTMLInputElement;
+
+        if (!files?.length) {
+          return;
+        }
+
+        const [file] = files;
+
+        this.setState({file: file});
+        this.refs.UploadCard.refs.file.setProps({label: file.name});
+      },
       onCardSubmit: () => {
+        if (!this.state.file || this.state.file === null) {
+          return;
+        }
+
+        this.props.store.dispatch(UserService.uploadAvatar, this.state.file);
+        this.setState({file: null});
+        this.refs.UploadCard.refs.file.setProps({label: null});
         this.refs.UploadCard.hide();
       },
     });
@@ -155,17 +212,19 @@ export class AboutPage extends Block {
   }
 
   render() {
+    const {user} = window.store.getState();
     return `
     {{#Layout}}
       <main class="about">
+
           {{{Avatar
             ref="AvatarRef"
             size="gargantuan"
-            src="https://place-hold.it/107"
+            src=avatar
             onClick=onClick 
           }}}
-
-          <h2 class="about__name">dfdgfgd</h2>
+          
+          <h2 class="about__name">${user?.displayName}</h2>
 
           {{{InputsList 
             ref="InputsList" 
@@ -186,6 +245,7 @@ export class AboutPage extends Block {
             ref="UploadCard"
             error=error
             onClick=onCardSubmit
+            onChange=onFileSelected
           }}}
       </main>
     {{/Layout}}

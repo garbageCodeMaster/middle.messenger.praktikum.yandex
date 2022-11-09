@@ -1,13 +1,16 @@
-import { ChatDTO, UserDTO } from 'api/types';
+import { API_URL, ChatDTO, UserDTO } from 'api/types';
+import defaultAvatar from '../../static/defaultAvatar/man.png';
 
 export const transformUser = (data: UserDTO): User => {
+  const avatar = data.avatar !== null ? API_URL+'resources'+data.avatar : defaultAvatar;
+
   return {
     id: data.id,
     login: data.login,
     firstName: data.first_name,
     secondName: data.second_name,
     displayName: data.display_name,
-    avatar: data.avatar,
+    avatar: avatar,
     phone: data.phone,
     email: data.email,
   };

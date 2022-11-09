@@ -1,8 +1,9 @@
 import AuthAPI from 'api/auth';
 import ChatAPI from 'api/chat';
-import { UserDTO, ChatDTO } from 'api/types';
+import { UserDTO, ChatDTO, API_URL } from 'api/types';
 import type { Dispatch } from 'core';
 import { transformUser, transformChat, apiHasError, formatDate } from 'utils';
+import defaultAvatar from '/static/defaultAvatar/man.png';
 
 type LoginPayload = {
   login: string;
@@ -57,7 +58,7 @@ export class AuthService {
       dispatch({ user: transformUser(responseUser as UserDTO) });
       
       const responseChats = await this.apiChat.getChats();
-      console.log(responseChats)
+
       if (apiHasError(responseChats)) {
         return;
       }
@@ -66,9 +67,11 @@ export class AuthService {
 
       chats.map((chat) => {
         if (chat.last_message) {
-          const day = new Date(chat.last_message.time);
-          chat.last_message.time = formatDate(day);
+          chat.last_message.time = formatDate(chat.last_message.time);
         }
+        
+        const avatar = chat.avatar !== null ? API_URL+'resources'+chat.avatar : defaultAvatar;
+        chat.avatar = avatar;
       });
       
       dispatch({ 

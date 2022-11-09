@@ -1,8 +1,9 @@
 import AuthAPI from 'api/auth';
 import ChatAPI from 'api/chat';
-import { UserDTO, ChatDTO} from 'api/types';
+import { UserDTO, ChatDTO, API_URL} from 'api/types';
 import type { Dispatch } from 'core';
 import { transformUser, transformChat, apiHasError, formatDate } from 'utils';
+import defaultAvatar from '/static/defaultAvatar/man.png'
 
 export class InitService {
 
@@ -27,7 +28,7 @@ export class InitService {
       }
       
       const responseChats = await this.apiChat.getChats();
-      console.log(responseChats)
+  
       if (apiHasError(responseChats)) {
         return;
       }
@@ -39,6 +40,8 @@ export class InitService {
           const day = new Date(chat.last_message.time);
           chat.last_message.time = formatDate(day);
         }
+        const avatar = chat.avatar !== null ? API_URL+'resources'+chat.avatar : defaultAvatar;
+        chat.avatar = avatar;
       });
       
       dispatch({ 

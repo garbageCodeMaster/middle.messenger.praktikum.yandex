@@ -3,7 +3,9 @@ import ChatService from 'services/chat';
 
 interface ChatContentProps {
   messages?: Record<string, unknown>;
+  title?: string;
   activeChat?: boolean;
+  avatar?: string;
   chatId?: number;
   status?: string;
 
@@ -34,26 +36,20 @@ export class ChatContent extends Block {
   }
 
   onAdd = () => {
-    console.log('add');
     this.refs.managmentCard.setProps({add: true, chatId: this.props.chatId});
     this.refs.managmentCard.show();
   }
 
   onDelete = () => {
-    console.log('delete');
     this.refs.managmentCard.setProps({add: false, chatId: this.props.chatId});
     this.refs.managmentCard.show();
   }
 
   onDeleteChat = () => {
-    console.log('delete');
-    //this. = null;
     window.store.dispatch(ChatService.deleteChat);
   }
 
   render() {
-    console.log("@@@@chat@@@@ render",this.props )
-
     if (!this.props.activeChat) {
       return `
         <div class="chat-content">
@@ -70,6 +66,7 @@ export class ChatContent extends Block {
               username=title
               status=status
               onClick=onClick
+              avatar=avatar
             }}}
 
             <div style="position: relative">
@@ -79,7 +76,6 @@ export class ChatContent extends Block {
                 onDelete=onDelete
                 onDeleteChat=onDeleteChat
               }}}
-
             </div> 
           </div>
 

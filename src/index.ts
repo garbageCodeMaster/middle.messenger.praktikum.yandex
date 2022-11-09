@@ -25,14 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.router = router;
   window.store = store;
 
-  store.on('changed', (prevState, nextState) => {
-    console.log(
-      '%cstore updated',
-      'background: #222; color: #bada55',
-      nextState,
-    );
-  });
-
   initRouter(router, store);
   store.dispatch(InitService.initApp);
 });

@@ -20,19 +20,13 @@ type ResponseData = {} | APIError;
 export default class UserAPI {
   private _request: HTTPTransport = new HTTPTransport();
 
-  // public searchUser(login: string) {
-  //   return this._request.post(`/user/search`, {
-  //     data: {login: login}
-  //   });
-  // }
-
   public editData = (data: EditRequestData): ResponseData =>
-    this._request.put('/user/profile', {data: data});
+    this._request.put('user/profile', {data: data});
 
   public editPassword = (data: PasswordRequestData): ResponseData =>
-    this._request.put('/user/password', {data: data});
+    this._request.put('user/password', {data: data});
 
-  public uploadAvatar = (data: unknown) =>
-    this._request.put('/user/profile/avatar', {data: data});
+  public uploadAvatar = (data: FormData): ResponseData =>
+    this._request.put('user/profile/avatar', {data: data, headers: {}});
   
 };
