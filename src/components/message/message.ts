@@ -15,12 +15,12 @@ export class Message extends Block {
   constructor({ message, time, user_id }: MessageProps) {
     let type, avatar;
     if (user_id === window.store.getState().user!.id) {
-      type = 'incoming';
-      avatar = defaultAvatar;
-    }
-    else {
       type = 'outgoing';
       avatar = window.store.getState().user!.avatar;
+    }
+    else {
+      type = 'incoming';
+      avatar = defaultAvatar;
     }
     
     super({ type, message, time, avatar });

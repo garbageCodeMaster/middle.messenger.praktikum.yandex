@@ -23,6 +23,7 @@ export class ChatList extends Block {
   selectChat(chat: Chat) {
     let chatInState = this.state.chat;
     const chats = window.store.getState().chats;
+    const chatFromStore = chats.find((chatStore: Chat) => chatStore.id === chat.id) ;
 
     if (chatInState !== null) {
       if (!chats.find((chat: Chat) => chat.id === chatInState.id)) {
@@ -42,14 +43,14 @@ export class ChatList extends Block {
       window.store.dispatch(ChatService.connectSocket, { userId, chatId: chat.id }); 
     }
   
-    chat.selected = true;
+    chatFromStore!.selected = true;
     const {lastMessage: _, ...newChat} = chat;
     this.setState({chat: newChat});
 
     if (chatInState !== null)
-      window.store.setChat([chat, chatInState]);
+      window.store.setChat([chatFromStore, chatInState]);
     else 
-      window.store.setChat([chat]);
+      window.store.setChat([chatFromStore!]);
     
     return true;
   }

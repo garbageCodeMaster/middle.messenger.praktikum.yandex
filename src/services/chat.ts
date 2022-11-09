@@ -194,7 +194,6 @@ export class ChatService {
         return;
       } 
       
-      //this.getChat();
     } 
     catch (error) {
       console.error(error);
@@ -291,8 +290,8 @@ export class ChatService {
         return;
       } 
 
-        await this.getChats(dispatch);
-        window.store.setChat([]);
+      await this.getChats(dispatch);
+      window.store.setChat([]);
 
     } 
     catch (error) {

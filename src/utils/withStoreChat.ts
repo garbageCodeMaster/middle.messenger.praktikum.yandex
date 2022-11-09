@@ -14,10 +14,10 @@ export function withStoreChat<P extends WithStateProps>(WrappedBlock: BlockClass
 
     __onChangeStoreCallback = () => {
       const chats = window.store.getState().chats;
+      
       const selectedChat = chats.find((chat: Chat) => chat.selected);
       // @ts-expect-error this is not typed
       (this.props.onUpdate as fun)(selectedChat);
-
       // @ts-expect-error this is not typed
       this.setProps({ chats: chats });
     }

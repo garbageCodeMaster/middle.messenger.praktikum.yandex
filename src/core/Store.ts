@@ -77,7 +77,7 @@ export class Store<State extends Record<string, any>> extends EventBus {
     this.state = {...this.state, ...{chats: newChatStore}}
     Object.assign(this.props, {chats: newChatStore} );
 
-    this.emit('chatChanged', this.state, prevState);
+    this.emit('chatChanged', this.state, prevState);  
   }
 
   public setByPath(path: string, value: unknown) {
