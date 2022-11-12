@@ -31,6 +31,10 @@
 .input {
   position: relative;
   margin-bottom: 40px;
+  
+  &:first-child {
+    margin-top: 10px;
+  }
 
   &-inline {
     padding: 0;
@@ -66,4 +70,3 @@
 .card__inputs {
   margin-bottom: 30px;
 }
-

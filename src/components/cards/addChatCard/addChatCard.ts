@@ -14,10 +14,13 @@ export class AddChatCard extends Block {
       onSubmit: (event: SubmitEvent) => {
         event.preventDefault();
 
-        const title = (this.refs.chatName.refs.login.getContent() as HTMLInputElement).value;
-        const login = (this.refs.login.refs.login.getContent() as HTMLInputElement).value;
+        const title = (this.refs.chatName.getContent() as HTMLInputElement).value;
+        const login = (this.refs.login.getContent() as HTMLInputElement).value;
 
-        window.store.dispatch(ChatService.addChat, { title: title, logins: [login]});
+        if (title && login) {
+           window.store.dispatch(ChatService.addChat, { title: title, logins: [login]}); 
+        }
+        
         this.hide();
       }
     });

@@ -1,5 +1,4 @@
 import { PathRouter, Store, Block } from 'core';
-import ChatService from 'services/chat';
 import { withRouter, withIsLoading } from 'utils';
 
 import './messenger.scss';
