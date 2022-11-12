@@ -1,6 +1,6 @@
 import AuthAPI from 'api/auth';
 import ChatAPI from 'api/chat';
-import { UserDTO, ChatDTO, API_URL } from 'api/types';
+import { UserDTO, ChatDTO, API_URL, DispatchStateHandler } from 'api/types';
 import type { Dispatch } from 'core';
 import { transformUser, transformChat, apiHasError, formatDate } from 'utils';
 import defaultAvatar from '/static/defaultAvatar/man.png';
@@ -33,11 +33,7 @@ export class AuthService {
     this.logout = this.logout.bind(this);
   }
 
-  async login(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    data: LoginPayload,
-  ): Promise<void> {
+  public login: DispatchStateHandler<LoginPayload> = async (dispatch, state, data) => {
     try {
       const response = await this.api.login(data);
 
@@ -86,11 +82,7 @@ export class AuthService {
     }
   }
 
-  async register(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    data: RegisterPayload,
-  ): Promise<void> {
+  public register: DispatchStateHandler<RegisterPayload> = async (dispatch, state, data) => {
     try {
       const response = await this.api.register(data);
 
@@ -117,11 +109,7 @@ export class AuthService {
     }
   }
 
-  async me(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    data: LoginPayload,
-  ): Promise<void> {
+  public async me(dispatch: Dispatch<AppState>): Promise<void> {
     try {
       const response = await this.api.me();
 
@@ -139,11 +127,7 @@ export class AuthService {
     }
   }
 
-  async logout(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    data: LoginPayload,
-  ): Promise<void> {
+  public async logout(dispatch: Dispatch<AppState>): Promise<void> {
     try {
       const response = await this.api.logout();
 

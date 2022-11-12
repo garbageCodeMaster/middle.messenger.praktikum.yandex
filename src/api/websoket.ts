@@ -1,5 +1,5 @@
-import { formatDate, transformChat } from 'utils';
-import { ChatDTO, WEBSOCKET_URL } from './types';
+import { formatDate } from 'utils';
+import { WEBSOCKET_URL } from './types';
 
 export default class Socket {
   private _webSocket: WebSocket;
@@ -14,56 +14,54 @@ export default class Socket {
   }
 
   private _setListeners() {
-    this._webSocket.addEventListener("open", this._onOpen.bind(this));
-    this._webSocket.addEventListener("message", this._onMessage.bind(this));
-    this._webSocket.addEventListener("close", this._onClose.bind(this));
-  }
+    this._webSocket.addEventListener("open", () => {
+      this._getMessages();
+  
+      this._ping = setInterval(() => {
+        this._webSocket.send(JSON.stringify({
+          type: 'ping'
+        }));
+      }, 10000);
+    });
 
-  private _onOpen() {
-    this._getMessages();
-
-    this._ping = setInterval(() => {
-      this._webSocket.send(JSON.stringify({
-        type: 'ping'
-      }));
-    }, 10000);
-  }
-
-  private _onClose() {
-    clearInterval(this._ping);
-    this._webSocket.close();
-    this._webSocket.removeEventListener("open", this._onOpen);
-    this._webSocket.removeEventListener("message", this._onMessage);
-    this._webSocket.removeEventListener("close", this._onClose);
-  }
-
-  private _onMessage(event: MessageEvent) {
-    const data = JSON.parse(event.data);
-    let chats = window.store.getState().chats;
-    let chat = chats.find(chat => this._chatId === chat.id);
-
-    if (!chat) return;
-    if (data.type !== 'user connected' &&
-        data.type !== 'pong'
-    ) {
-      if (Array.isArray(data)) {
-        chat.messages = data.map((message) => {
-            const day = new Date(message.time);
-            message.time = formatDate(day);
-
-            return message;
-        }).reverse();
-        window.store.setChat(chats);
+    this._webSocket.addEventListener("message", (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data);
+        let chats = window.store.getState().chats;
+        let chat = chats.find(chat => this._chatId === chat.id);
+    
+        if (!chat) return;
+        if (data.type !== 'user connected' &&
+            data.type !== 'pong'
+        ) {
+          if (Array.isArray(data)) {
+            chat.messages = data.map((message) => {
+                const day = new Date(message.time);
+                message.time = formatDate(day);
+    
+                return message;
+            }).reverse();
+            window.store.setChat(chats);
+          }
+          else {
+            const day = new Date(data.time);
+            data.time = formatDate(day);
+            chat.messages.push(data);
+            chat.lastMessage = data;
+    
+            window.store.setChat([chat]);
+          }
+        }
       }
-      else {
-        const day = new Date(data.time);
-        data.time = formatDate(day);
-        chat.messages.push(data);
-        chat.lastMessage = data;
-
-        window.store.setChat([chat]);
+      catch(error) {
+        console.error(error);
       }
-    }
+    });
+
+    this._webSocket.addEventListener("close", () => {
+      clearInterval(this._ping);
+      this._webSocket.close();
+    });
   }
 
   private _getMessages(count: string = '0') {
@@ -74,7 +72,6 @@ export default class Socket {
   }
 
   public sendMessage(message: string) {
-    console.log("sendMessage")
     this._webSocket.send(
       JSON.stringify({
         content: message,

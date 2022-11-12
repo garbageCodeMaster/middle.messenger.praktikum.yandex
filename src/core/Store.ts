@@ -20,32 +20,10 @@ export class Store<State extends Record<string, any>> extends EventBus {
   constructor(defaultState: State) {
     super();
 
-    this.props = this._makePropsProxy(defaultState);
     this.state = defaultState;
     this.set(defaultState);
   }
 
-  _makePropsProxy(props: any): any {
-    return new Proxy(props as unknown as object, {
-      get(target: Record<string, unknown>, prop: string) {
-        const value = target[prop];
-        return typeof value === 'function' ? value.bind(target) : value;
-      },
-      set: (target: Record<string, unknown>, prop: string, value: unknown) => {
-        const prevState = this.state;
-        target[prop] = value;
-
-        if (prop === 'chats') {
-          
-        }
-        
-        return true;
-      },
-      deleteProperty() {
-        throw new Error('Нет доступа');
-      },
-    }) as unknown as any;
-  }
 
   public getState() {
     return this.state;
@@ -75,7 +53,6 @@ export class Store<State extends Record<string, any>> extends EventBus {
     });
     
     this.state = {...this.state, ...{chats: newChatStore}}
-    Object.assign(this.props, {chats: newChatStore} );
 
     this.emit('chatChanged', this.state, prevState);  
   }
@@ -107,7 +84,6 @@ export class Store<State extends Record<string, any>> extends EventBus {
     const prevState = { ...this.state };
     this.state = { ...this.state, ...nextState };
 
-    Object.assign(this.props, nextState);
     this.emit('changed', prevState, {...this.state, nextState});
   }
 

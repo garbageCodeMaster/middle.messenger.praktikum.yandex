@@ -4,7 +4,6 @@ import ChatService from 'services/chat';
 import '../card.scss';
 
 interface CardProps {
-    error?: string;
     add?: boolean;
     chatId?: number;
 }
@@ -12,19 +11,15 @@ interface CardProps {
 export class ManagmentCard extends Block {
   static componentName = 'ManagmentCard';
 
-  constructor({ error }: CardProps) {
-    super({ error });
+  constructor(props: CardProps) {
+    super(props);
 
     this.setProps({
-      onAdd: () => {
-        const login = (this.refs.input.getContent() as HTMLInputElement).value;
-        window.store.dispatch(ChatService.addUsers, {logins: [login], chatId: this.props.chatId});
+      onSubmit: (event: SubmitEvent) => {
+        event.preventDefault();
 
-        this.hide();
-      },
-      onDelete: () => {
         const login = (this.refs.input.getContent() as HTMLInputElement).value;
-        window.store.dispatch(ChatService.deleteUser, {login: login, chatId: this.props.chatId});
+        window.store.dispatch(this.props.add ? ChatService.addUsers : ChatService.deleteUsers, {logins: [login], chatId: this.props.chatId});
 
         this.hide();
       }
@@ -32,9 +27,10 @@ export class ManagmentCard extends Block {
   }
 
   protected render(): string {
+
     return `
 <div class="modal modal--middle">
-    <div class="card">
+    {{#Form class="card card-column" ref="form" onSubmit=onSubmit}}  
         <h3 class="card__header">
             {{#if add}}
                 Add new user
@@ -43,7 +39,7 @@ export class ManagmentCard extends Block {
             {{/if}}
         </h3>
 
-        <form class="card-form">  
+        
             <div class="card__main">
                 <div class="input-list">
                     <div class="input">
@@ -60,14 +56,15 @@ export class ManagmentCard extends Block {
             </div>
 
             <div class="card__action">
-                {{#if add}}
-                    {{#Button type="action-button" onClick=onAdd}}Add{{/Button}}
-                {{else}}
-                    {{#Button type="action-button" onClick=onDelete}}Delete{{/Button}}
-                {{/if}}
+                {{#Button class="action-button" type="submit"}}
+                    {{#if add}}
+                        Add
+                    {{else}}
+                        Delete
+                    {{/if}}
+                {{/Button}}
             </div>
-        </form> 
-    </div>
+    {{/Form}}
 </div>
         `;
   }

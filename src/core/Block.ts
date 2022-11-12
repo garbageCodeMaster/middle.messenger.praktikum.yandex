@@ -70,7 +70,6 @@ export default class Block<P = any> {
     const elementInDOM = document.body.contains(this._element);
 
     if (elementInDOM) {
-      //console.log("check", this)
       setTimeout(() => this._checkInDom(), 1000);
       return;
     }
@@ -182,7 +181,7 @@ export default class Block<P = any> {
     return this.element!;
   }
 
-  _makePropsProxy(props: any): any {
+  _makePropsProxy(props: P): any {
     return new Proxy(props as unknown as object, {
       get(target: Record<string, unknown>, prop: string) {
         const value = target[prop];

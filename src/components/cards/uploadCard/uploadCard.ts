@@ -5,20 +5,21 @@ import '../card.scss';
 interface UploadCardProps {
     ref?: string;
     file?: string;
-    onClick?: () => void;
+    onSubmit: () => void;
     onChange?: () => void;
 }
 
 export class UploadCard extends Block {
   static componentName = 'UploadCard';
 
-  constructor({ file, ref, onClick, onChange }: UploadCardProps) {
-    super({ file, ref, onClick, onChange });
+  constructor({ file, ref, onSubmit, onChange }: UploadCardProps) {
+    super({ file, ref, onSubmit, onChange });
   }
 
   protected render(): string {
     return `
-        <div class="modal modal--middle">
+    <div class="modal modal--middle">
+        {{#Form ref=form onSubmit=onSubmit}}
             <div class="card card-column">
                 <h3 class="card__header {{#if error}}card__header--red{{/if}}">
                     Upload the file
@@ -32,7 +33,7 @@ export class UploadCard extends Block {
                             name="file" 
                             type="file" 
                             id="avatar" 
-                            class="input input__file" 
+                            class="input__file" 
                             onChange=onChange
                         }}}
                         <label for="avatar" class="input__file-button">
@@ -42,7 +43,7 @@ export class UploadCard extends Block {
                 </div>
 
                 <div class="card__action">
-                    {{#Button type="action-button" onClick=onClick}}Apply{{/Button}}
+                    {{#Button class="action-button" type="submit"}}Apply{{/Button}}
                 </div>
 
                 {{#if additional}}
@@ -51,7 +52,8 @@ export class UploadCard extends Block {
                     </h5>
                 {{/if}}
             </div>
-        </div>
+        {{/Form}}
+    </div>
         `;
   }
 }

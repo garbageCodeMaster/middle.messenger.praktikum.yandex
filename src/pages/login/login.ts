@@ -25,7 +25,9 @@ export class LoginPage extends Block {
 
   protected getStateFromProps() {
     this.setState({
-      onLogin: () => {
+      onSubmit: (event: SubmitEvent) => {
+        event.preventDefault();
+        
         const validateData = [
           {
             inputType: ValidateType.Login,
@@ -56,7 +58,7 @@ export class LoginPage extends Block {
     {{#Layout}}
       <main class="home-page">
         <div class="card card-column">
-          <form class="card-form">
+          {{#Form class="card-form" ref="form" onSubmit=onSubmit}}
             <div class="card__inputs">
               <div class="form-header">
                   Log In
@@ -85,11 +87,11 @@ export class LoginPage extends Block {
             </div>
 
             <div class="button-list">      
-              {{#Button type="action-button" onClick=onLogin}}Login{{/Button}}
+              {{#Button class="action-button" type="submit"}}Login{{/Button}}
 
-              {{#Button type="link link-button" onClick=onNavigateNext}}Don't have an account?{{/Button}}
+              {{#Button class="link link-button" type="button" onClick=onNavigateNext}}Don't have an account?{{/Button}}
             </div> 
-          </form>
+          {{/Form}}
         </div>
       </main>
     {{/Layout}}

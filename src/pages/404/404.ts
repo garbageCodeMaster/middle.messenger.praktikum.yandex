@@ -38,7 +38,7 @@ export class Page404 extends Block {
           page not found...
       </h2>
 
-      {{#Button type="link-button" onClick=onNavigateNext}}back to chats{{/Button}}
+      {{#Button class="link-button" type="button" onClick=onNavigateNext}}back to chats{{/Button}}
     </div>
     `;
   }

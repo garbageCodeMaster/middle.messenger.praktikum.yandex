@@ -5,6 +5,7 @@ export enum ValidateType {
     Phone,
     Name,
     PasswordCheck,
+    OldPassword,
 }
 
 interface ErrorData {
@@ -31,11 +32,12 @@ export function validateForm(validateData: ValidateData[]): ErrorData {
         error = 'Login should contain more than 3 chars';
       }
     } 
-    else if (input.inputType === ValidateType.Password) {
+    else if (input.inputType === ValidateType.Password ||
+             input.inputType === ValidateType.OldPassword ) {
       if (!input.inputValue) {
         error = 'Password is required';
       } 
-      else if (input.inputValue.length < 7) {
+      else if (input.inputType === ValidateType.Password && input.inputValue.length < 7) {
         error = 'Password should contain more than 6 chars';
       }
     } 

@@ -1,9 +1,25 @@
 import ChatAPI from 'api/chat';
 import Socket from 'api/websoket';
-import { API_URL, ChatDTO, UserDTO } from 'api/types';
+import { API_URL, ChatDTO, UserDTO, DispatchStateHandler } from 'api/types';
 import type { Dispatch } from 'core';
 import { transformChat, apiHasError, formatDate } from 'utils';
 import defaultAvatar from '/static/defaultAvatar/man.png'
+
+type UsersManagmentPayload = {
+  logins: string[], 
+  chatId: number,
+}
+
+type NewChatPayload = {
+  title: string,
+  logins: string[], 
+}
+
+type SocketConnectPayload = {
+  chatId: number, 
+  userId: number,
+}
+
 
 export class ChatService {
   private api: ChatAPI;
@@ -21,10 +37,10 @@ export class ChatService {
     this.deleteChat = this.deleteChat.bind(this);
     this.searchUser = this.searchUser.bind(this);
     this.addUsers = this.addUsers.bind(this);
-    this.deleteUser = this.deleteUser.bind(this);
+    this.deleteUsers = this.deleteUsers.bind(this);
     this.connectSocket = this.connectSocket.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
-  }
+  } 
 
   public async searchUser(
     login: string,
@@ -72,9 +88,7 @@ export class ChatService {
     }
   }
 
-  async getChats(
-    dispatch: Dispatch<AppState>,
-  ): Promise<void> {
+  async getChats(dispatch: Dispatch<AppState>): Promise<void> {
     try {
       const response = await this.api.getChats();
 
@@ -100,13 +114,9 @@ export class ChatService {
     }
   }
 
-  public async addChat(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    title: string,
-  ): Promise<void> {
+  public addChat: DispatchStateHandler<NewChatPayload> = async (dispatch, state, data) => {
     try {
-      const usersId = await this.api.searchUser(title) as UserDTO[];
+      const usersId = await this.searchUser(data.logins[0]) as UserDTO[];
 
       if (apiHasError(usersId)) {
         console.error(usersId.reason);
@@ -114,9 +124,9 @@ export class ChatService {
       } 
 
       if (usersId.length === 0) {
-        console.error(`No user with login: ${title}`);
+        console.error(`No user with login: ${data.logins}`);
         window.store.setApiMessage({ apiMessage: {
-          message: `No user with login: ${title}`,
+          message: `No user with login: ${data.logins}`,
           type: 'error' 
         }});
         
@@ -125,7 +135,7 @@ export class ChatService {
         return;
       }
 
-      const chatId = await this.api.addChat(title) as {id: number};
+      const chatId = await this.api.addChat(data.title) as {id: number};
 
       if (apiHasError(chatId)) {
         console.error(chatId.reason);
@@ -138,6 +148,11 @@ export class ChatService {
         console.error(result.reason);
         return;
       } 
+
+      window.store.setApiMessage({ apiMessage: {
+        message: `Chat was created successfully`,
+        type: 'success' 
+      }});
 
       const response = await this.api.getChats();
 
@@ -162,14 +177,7 @@ export class ChatService {
     }
   }
 
-  public async addUsers(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    data: {    
-      logins: string[], 
-      chatId: number,
-    }
-  ): Promise<void> {
+  public addUsers: DispatchStateHandler<UsersManagmentPayload> = async (dispatch, state, data) => {
     try {
         const users = [];
       
@@ -201,12 +209,8 @@ export class ChatService {
       console.error(error);
     }
   }
-
-  public async connectSocket(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    ids: {chatId: number, userId: number}
-    ): Promise<void> {
+  
+  public connectSocket: DispatchStateHandler<SocketConnectPayload> = async (dispatch, state, ids) => {
     try {
       const { token } = await this.api.getToken(ids.chatId) as {token: string};
 
@@ -218,11 +222,7 @@ export class ChatService {
     }
   }
 
-  public async sendMessage(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    message: string
-    ): Promise<void> {
+  public sendMessage:  DispatchStateHandler<string> = async (dispatch, state, message) => {
     try {
       if (this.socket) {
         this.socket.sendMessage(message);
@@ -236,16 +236,9 @@ export class ChatService {
     }
   }
 
-  public async deleteUser(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    data: {    
-      login: string, 
-      chatId: number,
-    }
-  ): Promise<void> {
+  public deleteUsers: DispatchStateHandler<UsersManagmentPayload> = async (dispatch, state, data) => {
     try {
-      const user = await this.searchUser(data.login);
+      const user = await this.searchUser(data.logins[0]);
 
       if (apiHasError(user)) {
         console.error(user.reason);
@@ -254,9 +247,9 @@ export class ChatService {
   
       if (!user) return;
       if (user.length === 0) {
-        console.error(`No user with login: ${data.login}`);
+        console.error(`No user with login: ${data.logins[0]}`);
         window.store.setApiMessage({ apiMessage: {
-          message: `No user with login: ${data.login}`,
+          message: `No user with login: ${data.logins[0]}`,
           type: 'error' 
         }});
 
@@ -270,7 +263,7 @@ export class ChatService {
       } 
 
       window.store.setApiMessage({ apiMessage: {
-        message: `User "${data.login}" was removed from chat`,
+        message: `User "${data.logins[0]}" was removed from chat`,
         type: 'success' 
       }});
       this.getChat(data.chatId);

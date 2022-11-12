@@ -47,7 +47,7 @@ export class AboutPage extends Block {
           noEdit: false,
         });
 
-        this.setState({ action: UserService.editData });
+        this.setState({ action: "editData" });
       },
       onPasswordChange: () => {
         const fields = [
@@ -66,7 +66,7 @@ export class AboutPage extends Block {
             fieldValue: 'new password',
           },
           {
-            key: 'repeatNewPassword',
+            key: 'repeatPassword',
             value: '',
             ref: 'repeatPassword',
             type: 'password',
@@ -74,98 +74,87 @@ export class AboutPage extends Block {
           },
         ];
 
-        this.refs.InputsList.setProps({ fields, disabled: false });
+        this.setProps({ fields: fields, disabled: false });
 
         this.refs.ButtonsList.setProps({
           noEdit: false,
         });
 
-        this.setState({ action: UserService.editPassword });
+        this.setState({ action: "editPassword" });
       },
-      onSubmit: () => {
+      onSubmit: (event: SubmitEvent) => {
+        event.preventDefault();
+
         const inputValue = {} as Record<string, unknown>;
         Object.values(this.refs.InputsList.refs).forEach((field) => {
           inputValue[field.props.key] = (field.refs.input.getContent() as HTMLInputElement).value;
         });
 
-        const fields = [
-          {
-            key: 'email',
-            value: inputValue.email,
-            ref: 'emailField',
-            type: 'email',
-            fieldValue: 'email',
-          },
-          {
-            key: 'login',
-            value: inputValue.login,
-            ref: 'loginField',
-            type: 'text',
-            fieldValue: 'login',
-          },
-          {
-            key: 'first_name',
-            value: inputValue.first_name,
-            ref: 'nameField',
-            type: 'text',
-            fieldValue: 'name',
-          },
-          {
-            key: 'second_name',
-            value: inputValue.second_name,
-            ref: 'valueField',
-            type: 'text',
-            fieldValue: 'lastname',
-          },
-          {
-            key: 'display_name',
-            value: inputValue.display_name,
-            ref: 'usernameField',
-            type: 'text',
-            fieldValue: 'username',
-          },
-          {
-            key: 'phone',
-            value: inputValue.phone,
-            ref: 'phoneField',
-            type: 'text',
-            fieldValue: 'phone',
-          },
-        ];
+        const fields = getMyData(window.store.getState().user as User);
 
-        const validation = validateForm([
-          {
-            inputType: ValidateType.Login,
-            inputValue: inputValue.login as string,
-          },
-          {
-            inputType: ValidateType.Email,
-            inputValue: inputValue.email as string,
-          },
-          {
-            inputType: ValidateType.Name,
-            inputValue: inputValue.display_name as string,
-          },
-          {
-            inputType: ValidateType.Phone,
-            inputValue: inputValue.phone as string,
-          },
-          {
-            inputType: ValidateType.PasswordCheck,
-            inputValue: inputValue.repeatPassword as string,
-            inputValueCompare: inputValue.newPassword as string,
-          },
-        ]);
+        if (this.state.action === "editPassword") {
+          const validation = validateForm([
+            {
+              inputType: ValidateType.OldPassword,
+              inputValue: inputValue.oldPassword as string,
+            },
+            {
+              inputType: ValidateType.Password,
+              inputValue: inputValue.newPassword as string,
+            },
+            {
+              inputType: ValidateType.PasswordCheck,
+              inputValue: inputValue.repeatPassword as string,
+              inputValueCompare: inputValue.newPassword as string,
+            },
+          ]);
 
-        if (Object.values(validation).some((error: string) => error.length > 0)) {
-          window.store.setApiMessage({ apiMessage: {
-            message: `${Object.values(validation).join('')}`,
-            type: 'error' 
-          }});
+          if (Object.values(validation).some((error: string) => error.length > 0)) {
+            window.store.setApiMessage({ apiMessage: {
+              message: `${Object.values(validation).join(' ')}`,
+              type: 'error' 
+            }});
 
-          return;
+            this.refs.InputsList.refs.oldPassword.refs.error.setProps({ textError: validation[ValidateType.OldPassword] });
+            this.refs.InputsList.refs.newPassword.refs.error.setProps({ textError: validation[ValidateType.Password] });            
+            this.refs.InputsList.refs.repeatPassword.refs.error.setProps({ textError: validation[ValidateType.PasswordCheck] });
+  
+            return;
+          }
+        } 
+        else if(this.state.action === "editData") {
+          const validation = validateForm([
+            {
+              inputType: ValidateType.Login,
+              inputValue: inputValue.login as string,
+            },
+            {
+              inputType: ValidateType.Email,
+              inputValue: inputValue.email as string,
+            },
+            {
+              inputType: ValidateType.Name,
+              inputValue: inputValue.display_name as string,
+            },
+            {
+              inputType: ValidateType.Phone,
+              inputValue: inputValue.phone as string,
+            },
+          ]);
+
+          if (Object.values(validation).some((error: string) => error.length > 0)) {
+            window.store.setApiMessage({ apiMessage: {
+              message: `${Object.values(validation).join(' ')}`,
+              type: 'error' 
+            }});
+            
+            this.refs.InputsList.refs.phoneField.refs.error.setProps({ textError: validation[ValidateType.Phone] });
+            this.refs.InputsList.refs.loginField.refs.error.setProps({ textError: validation[ValidateType.Login] });
+            this.refs.InputsList.refs.emailField.refs.error.setProps({ textError: validation[ValidateType.Email] });
+  
+            return;
+          }
         }
-
 
         this.setProps({ fields, disabled: true });
         
@@ -180,7 +169,7 @@ export class AboutPage extends Block {
         });
 
 
-        this.props.store.dispatch(this.state.action, inputValue);
+        this.props.store.dispatch(this.state === "editData" ? UserService.editData : UserService.editPassword, inputValue);
       },
       onFileSelected: (event: InputEvent) => {
         const { files }: { files: FileList | null } = event.target as HTMLInputElement;
@@ -194,7 +183,9 @@ export class AboutPage extends Block {
         this.setState({file: file});
         this.refs.UploadCard.refs.file.setProps({label: file.name});
       },
-      onCardSubmit: () => {
+      onCardSubmit: (event: SubmitEvent) => {
+        event.preventDefault();
+        
         if (!this.state.file || this.state.file === null) {
           return;
         }
@@ -215,39 +206,39 @@ export class AboutPage extends Block {
     const {user} = window.store.getState();
     return `
     {{#Layout}}
-      <main class="about">
+      <div>
+        {{#Form class="about" ref=form onSubmit=onSubmit}}
+            {{{Avatar
+              ref="AvatarRef"
+              size="gargantuan"
+              src=avatar
+              onClick=onClick 
+            }}}
+            
+            <h2 class="about__name">${user?.displayName}</h2>
 
-          {{{Avatar
-            ref="AvatarRef"
-            size="gargantuan"
-            src=avatar
-            onClick=onClick 
-          }}}
-          
-          <h2 class="about__name">${user?.displayName}</h2>
+            {{{InputsList 
+              ref="InputsList" 
+              fields=fields
+              disabled=disabled
+            }}}
 
-          {{{InputsList 
-            ref="InputsList" 
-            fields=fields
-            disabled=disabled
-          }}}
-
-          {{{ButtonsList 
-            ref="ButtonsList" 
-            noEdit="{{noEdit}}"
-            onDataChange=onDataChange 
-            onPasswordChange=onPasswordChange
-            onExit=onExit
-            onSubmit=onSubmit
-          }}}
-
-          {{{UploadCard
+            {{{ButtonsList 
+              ref="ButtonsList" 
+              noEdit="{{noEdit}}"
+              onDataChange=onDataChange 
+              onPasswordChange=onPasswordChange
+              onExit=onExit
+            }}}
+        {{/Form}}
+         
+        {{{UploadCard
             ref="UploadCard"
             error=error
-            onClick=onCardSubmit
+            onSubmit=onCardSubmit
             onChange=onFileSelected
-          }}}
-      </main>
+        }}}
+      </div>
     {{/Layout}}
     `;
   }

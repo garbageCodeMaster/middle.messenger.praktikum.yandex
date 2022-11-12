@@ -14,7 +14,9 @@ export class ChatForm extends Block {
       onClip: () => {
         this.refs.panelCard.show();
       },
-      onSubmit: () => {
+      onSubmit: (event: SubmitEvent) => {
+        event.preventDefault();
+
         const message = (this.refs.input.getContent() as HTMLInputElement).value.trim();
 
         if (message) {
@@ -29,8 +31,8 @@ export class ChatForm extends Block {
 
   render() {
     return `
-      <form class="panel">
-          {{#Button type="panel__button" ref="clipButton" onClick=onClip}}
+      {{#Form class="panel" ref="form" onSubmit=onSubmit}}
+          {{#Button class="panel__button" type="button" ref="clipButton" onClick=onClip}}
               <img src=${paperclipUrl} alt="clip">
           {{/Button}}
 
@@ -41,14 +43,14 @@ export class ChatForm extends Block {
             placeholder="your text"
           }}}
 
-          {{#Button type="panel__button" ref="enterButton" onClick=onSubmit}}
+          {{#Button class="panel__button" type="button" ref="enterButton" onClick=onSubmit}}
               <img src=${messageUrl} alt="enter">
           {{/Button}}
 
           {{{PanelCard
             ref="panelCard"
           }}}
-      </form>
+      {{/Form}}
     `;
   }
 }

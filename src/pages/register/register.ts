@@ -20,7 +20,9 @@ export class RegisterPage extends Block {
 
     this.setProps({
       onNavigateNext: () => this.onNavigateNext(),
-      onLogin: () => {
+      onSubmit: (event: SubmitEvent) => {
+        event.preventDefault();
+
         const validateData = [
           {
             inputType: ValidateType.Login,
@@ -102,7 +104,7 @@ export class RegisterPage extends Block {
       {{#Layout}}
         <main class="home-page">
           <div class="card card-column">
-            <form class="card-form">
+            {{#Form class="card-form" ref="form" onSubmit=onSubmit}}
               <div class="input-list">
                 <div class="form-header">
                     Register
@@ -168,11 +170,11 @@ export class RegisterPage extends Block {
               </div>
 
               <div class="button-list">
-                {{#Button type="action-button" onClick=onLogin}}Register{{/Button}}
+                {{#Button class="action-button" type="submit"}}Register{{/Button}}
 
-                {{#Button type="link link-button" onClick=onNavigateNext}}Already have an account?{{/Button}}
+                {{#Button class="link link-button" type="button" onClick=onNavigateNext}}Already have an account?{{/Button}}
               </div>
-            </form>
+            {{/Form}}
           </div>
         </main>
       {{/Layout}}

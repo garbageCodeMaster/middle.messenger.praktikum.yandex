@@ -6,7 +6,6 @@ interface ButtonsListProps {
   onDataChange?: string;
   onPasswordChange?: string;
   onExit?: () => void;
-  onSubmit?: string;
 }
 
 export class ButtonsList extends Block {
@@ -21,17 +20,17 @@ export class ButtonsList extends Block {
     {{#if noEdit}}
       <div class="about__action">
         <div class="field">
-            {{#Button type="effect-button" onClick=onDataChange}}change data{{/Button}}
+            {{#Button class="effect-button" type="button" onClick=onDataChange}}change data{{/Button}}
         </div>
         <div class="field">
-            {{#Button type="effect-button" onClick=onPasswordChange}}change password{{/Button}}
+            {{#Button class="effect-button" type="button" onClick=onPasswordChange}}change password{{/Button}}
         </div>
         <div class="field">
-            {{#Button type="effect-button effect-button--red" onClick=onExit}}exit{{/Button}}
+            {{#Button class="effect-button effect-button--red" type="button" onClick=onExit}}exit{{/Button}}
         </div>
     {{else}}
         <div class="action">
-          {{#Button type="action-button" onClick=onSubmit}}Apply{{/Button}}
+          {{#Button class="action-button" type="submit"}}Apply{{/Button}}
         </div>
       </div>
     {{/if}}

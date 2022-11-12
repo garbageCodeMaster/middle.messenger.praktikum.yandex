@@ -14,7 +14,6 @@
   align-items: center;
   justify-content: space-between;
   width: 340px;
-  min-height: 420px;
 }
 
 .form-header {
@@ -69,8 +68,6 @@
 }
 
 .action {
-  margin: 0 auto;
-
   &-button {
     width: 280px;
     height: 37px;

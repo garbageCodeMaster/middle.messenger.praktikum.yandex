@@ -36,17 +36,17 @@ export class ChatCard extends Block {
     return `
   <div class="modal modal--bottom">
     <div class="card">
-      {{#Button type="managment-button" onClick=onAdd}}
+      {{#Button class="managment-button" type="button" onClick=onAdd}}
         <img src=${addUser} alt="add">
         <div class="managment-label">Add user</div>
       {{/Button}}
 
-      {{#Button type="managment-button" onClick=onDelete}}
+      {{#Button class="managment-button" type="button" onClick=onDelete}}
         <img src=${deleteUser} alt="remove">
         <div class="managment-label">Delete user</div>
       {{/Button}}
 
-      {{#Button type="managment-button" onClick=onDeleteChat}}
+      {{#Button class="managment-button" type="button" onClick=onDeleteChat}}
         <img src=${deleteChat} alt="delete chat" width="24px">
         <div class="managment-label">Delete chat</div>
       {{/Button}}

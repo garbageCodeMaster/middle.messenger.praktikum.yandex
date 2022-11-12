@@ -1,5 +1,5 @@
 import { HTTPTransport } from 'utils/HTTPTransport';
-import { APIError, ChatDTO } from './types';
+import { APIError } from './types';
 
 
 type ResponseData = {} | APIError;
@@ -11,7 +11,7 @@ export default class ChatAPI {
     this._request.get(`chats/${id}/common`);
 
   public getChats = (offset = 0, limit = 20, title = '') =>
-    this._request.get('chats', {data: offset, limit, title});
+    this._request.get('chats', {data: {offset, limit, title}});
 
   public addChat = (title: string) =>
     this._request.post('chats', { data: {title: title}});

@@ -38,7 +38,7 @@ export class Profile extends Block {
         </div>
     </div>
     <div class="profile__settings">
-      {{#Button type="settings-button" onClick=onClick}}settings{{/Button}}
+      {{#Button class="settings-button" type="button" onClick=onClick}}settings{{/Button}}
     </div>
 </div>
     `;

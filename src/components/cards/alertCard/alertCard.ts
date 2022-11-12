@@ -33,7 +33,7 @@ export class AlertCard extends Block {
             label=message
           }}}
 
-          {{#Button type="close-button" onClick=onClose}}
+          {{#Button class="close-button" type="button" onClick=onClose}}
             <img src="${closeUrl}" alt="close" width="24px">
           {{/Button}}
         </div>

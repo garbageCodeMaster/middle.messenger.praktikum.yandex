@@ -1,10 +1,8 @@
 import UserAPI from 'api/user';
-import { UserDTO } from 'api/types';
-import type { Dispatch } from 'core';
+import { DispatchStateHandler, UserDTO } from 'api/types';
 import { transformUser, apiHasError } from 'utils';
-import AlertCard from 'components/cards/alertCard';
 
-type EditRequestData = {
+type UserDataChangePayload = {
   first_name: string,
   second_name: string,
   display_name: string,
@@ -14,10 +12,11 @@ type EditRequestData = {
   avatar?: any,
 };
 
-type PasswordRequestData = {
+type PasswordChangePayload = {
   oldpassword: string,
   newpassword: string,
 };
+
 
 export class UserService {
   private api: UserAPI;
@@ -55,11 +54,7 @@ export class UserService {
     }
   }
 
-  public async editPassword(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    data: PasswordRequestData,
-    ): Promise<void> {
+  public editPassword: DispatchStateHandler<PasswordChangePayload> = async (dispatch, state, data) => {
     try {
       const response = await this.api.editPassword(data);
 
@@ -83,11 +78,7 @@ export class UserService {
     }
   }
 
-  public async editData(
-    dispatch: Dispatch<AppState>,
-    state: AppState,
-    data: EditRequestData,
-    ): Promise<void> { 
+  public editData: DispatchStateHandler<UserDataChangePayload> = async (dispatch, state, data) => { 
     try {
       const response = await this.api.editData(data);
 

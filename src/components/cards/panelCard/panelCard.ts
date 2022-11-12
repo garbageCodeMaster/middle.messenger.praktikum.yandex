@@ -33,17 +33,17 @@ export class PanelCard extends Block {
     return `
         <div class="modal modal--top">
             <div class="card">
-                {{#Button type="managment-button" onClick=onPhoto}}
+                {{#Button class="managment-button" type="button" onClick=onPhoto}}
                     <img src=${imageUrl} alt="clip">
                     <div class="managment-label">Photo/Video</div>
                 {{/Button}}
 
-                {{#Button type="managment-button" onClick=onFile}}
+                {{#Button class="managment-button" type="button" onClick=onFile}}
                     <img src=${filetextUrl} alt="clip">
                     <div class="managment-label">File</div>
                 {{/Button}}
 
-                {{#Button type="managment-button" onClick=onLocation}}
+                {{#Button class="managment-button" type="button" onClick=onLocation}}
                     <img src=${mapmarkerUrl} alt="clip">
                     <div class="managment-label">Location</div>
                 {{/Button}}

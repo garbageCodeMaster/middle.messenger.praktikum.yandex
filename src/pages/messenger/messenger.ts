@@ -1,11 +1,9 @@
 import { PathRouter, Store, Block } from 'core';
 import ChatService from 'services/chat';
-import { withStore, withRouter, withIsLoading } from 'utils';
+import { withRouter, withIsLoading } from 'utils';
 
 import './messenger.scss';
 import addUrl from 'icons/plus-circle.svg';
-
-type fun = (P: any) => void;
 
 interface MessengerProps {
   router: PathRouter;
@@ -73,12 +71,7 @@ export class MessengerPage extends Block {
   }
 
   onAdd() {
-    const search = (this.refs.input.getContent() as HTMLInputElement).value;
-
-    if (search) {
-      window.store.dispatch(ChatService.addChat, search);
-      this.refs.input.setProps({});
-    }
+    this.refs.addChatCard.show();
   }
 
   render() {
@@ -105,9 +98,14 @@ export class MessengerPage extends Block {
                         placeholder="search"
                         onInput=onSearchInput
                       }}}
-                      {{#Button type="panel__button" onClick=onAdd}}
+
+                      {{#Button class="panel__button" type="button" onClick=onAdd}}
                         <img src=${addUrl} alt="clip">
                       {{/Button}}
+
+                      {{{AddChatCard
+                        ref="addChatCard"
+                      }}}
                   </div>
                 </div>
 

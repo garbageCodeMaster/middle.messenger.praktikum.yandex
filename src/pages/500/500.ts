@@ -37,7 +37,7 @@ export class Page500 extends Block {
           something went wrong...
       </h2>
 
-      {{#Button type="link-button" onClick=onNavigateNext}}back to chats{{/Button}}
+      {{#Button class="link-button" type="button" onClick=onNavigateNext}}back to chats{{/Button}}
     </div>
     `;
   }
