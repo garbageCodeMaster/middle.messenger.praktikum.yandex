@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "parcel src/index.html --no-cache",
     "build": "parcel build src/index.html --no-source-maps --no-cache",
-    "start": "npm run build && node ./server",
+    "start": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint:es": "eslint . --fix",
     "lint:style": "stylelint . --fix"
