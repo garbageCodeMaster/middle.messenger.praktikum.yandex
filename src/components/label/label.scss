@@ -1,0 +1,10 @@
+@use "/src/styles/variables.scss" as var;
+
+.label {
+    &-success {
+        color: var.$light-green;
+    }
+    &-error { 
+        color: var.$light-red;
+    }
+}

@@ -10,6 +10,7 @@ interface InputProps {
   type?: 'text' | 'password' | 'email';
   placeholder?: string;
   value?: string;
+  id?: string;
   name?: string;
   class?: string;
   disabled?: boolean;
@@ -19,7 +20,7 @@ export class Input extends Block {
   static componentName = 'Input';
 
   constructor({
-    onInput, onFocus, onBlur, ...props
+    onInput, onFocus, onBlur, onChange, ...props
   }: InputProps) {
     super({
       ...props,
@@ -27,6 +28,7 @@ export class Input extends Block {
         input: onInput,
         focus: onFocus,
         blur: onBlur,
+        change: onChange,
       },
     });
   }
@@ -36,6 +38,7 @@ export class Input extends Block {
       <input class="{{#if class}}{{class}}{{else}}input__field{{/if}}" 
         name="{{name}}" 
         type="{{type}}" 
+        {{#if id}}id="{{id}}"{{/if}} 
         {{#if value}}value="{{value}}"{{/if}} 
         {{#if disabled}}disabled{{/if}} 
         {{#if placeholder}}placeholder="{{placeholder}}"{{/if}}

@@ -4,37 +4,46 @@ import '../card.scss';
 
 interface UploadCardProps {
     ref?: string;
-    error?: string;
-    onClick?: () => void;
+    file?: string;
+    onSubmit: () => void;
+    onChange?: () => void;
 }
 
 export class UploadCard extends Block {
   static componentName = 'UploadCard';
 
-  constructor({ error, ref, onClick }: UploadCardProps) {
-    super({ error, ref, onClick });
+  constructor({ file, ref, onSubmit, onChange }: UploadCardProps) {
+    super({ file, ref, onSubmit, onChange });
   }
 
   protected render(): string {
     return `
-        <div class="absolute absolute--middle">
-            <div class="card">
+    <div class="modal modal--middle">
+        {{#Form ref=form onSubmit=onSubmit}}
+            <div class="card card-column">
                 <h3 class="card__header {{#if error}}card__header--red{{/if}}">
                     Upload the file
                 </h3>
                 
                 <div class="card__main">
-                    {{#if file}}
-                        <div class="card__main-file">
-                            {{file}}
-                        </div>
-                    {{else}}
-                        {{#Button type="effect-button like-link"}}Choose from pc{{/Button}}
-                    {{/if}}
+                    {{{Label ref="file"}}}
+
+                    <div class="input__wrapper">
+                        {{{Input
+                            name="file" 
+                            type="file" 
+                            id="avatar" 
+                            class="input__file" 
+                            onChange=onChange
+                        }}}
+                        <label for="avatar" class="input__file-button">
+                            <span class="effect-button like-link">Choose from pc</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="card__action">
-                    {{#Button type="action-button" onClick=onClick}}Apply{{/Button}}
+                    {{#Button class="action-button" type="submit"}}Apply{{/Button}}
                 </div>
 
                 {{#if additional}}
@@ -43,7 +52,8 @@ export class UploadCard extends Block {
                     </h5>
                 {{/if}}
             </div>
-        </div>
+        {{/Form}}
+    </div>
         `;
   }
 }

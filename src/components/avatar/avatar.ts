@@ -17,8 +17,8 @@ export class Avatar extends Block {
 
   protected render(): string {
     return `
-    <div class="profile-picture profile-picture--{{size}}">
-        <img src="{{src}}" class="profile-img" alt="profile picture">
+    <div class="profile-picture">
+        <img src="{{src}}" class="profile-img profile-picture--{{size}}" alt="profile picture">
     </div>
     `;
   }

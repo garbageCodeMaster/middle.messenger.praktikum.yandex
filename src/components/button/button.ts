@@ -4,20 +4,21 @@ import './button.scss';
 
 interface ButtonProps {
   text: string;
-  type: string;
+  type: 'submit' | 'button';
+  class?: string;
   onClick: () => void;
 }
 
 export class Button extends Block {
   static componentName = 'Button';
 
-  constructor({ text, type, onClick }: ButtonProps) {
-    super({ text, type, events: { click: onClick } });
+  constructor({ onClick, ...props }: ButtonProps) {
+    super({ ...props, events: { click: onClick } });
   }
 
   protected render(): string {
     return `
-        <button class="{{type}}" type="button" data-slot="1"></button>
+        <button {{#if class}}class="{{class}}"{{/if}} type="{{type}}" data-slot="1"></button>
     `;
   }
 }

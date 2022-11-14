@@ -8,25 +8,12 @@
   padding: 10px 0;
 }
 
-.card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 340px;
-  padding: 30px 20px;
-  background-color: var.$white;
-  border-radius: 12px;
-  box-shadow: 0 0 6px rgb(0 0 0 / 14%);
-}
-
 .card-form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   width: 340px;
-  min-height: 420px;
 }
 
 .form-header {
@@ -44,6 +31,10 @@
 .input {
   position: relative;
   margin-bottom: 40px;
+  
+  &:first-child {
+    margin-top: 10px;
+  }
 
   &-inline {
     padding: 0;
@@ -78,22 +69,4 @@
 
 .card__inputs {
   margin-bottom: 30px;
-}
-
-.action {
-  margin: 0 auto;
-}
-
-.link {
-  margin-top: 14px;
-  text-align: center;
-}
-
-.link-button {
-  color: var.$blue;
-  font-weight: 500;
-  font-size: 13px;
-  font-family: Inter;
-  font-style: normal;
-  line-height: 11px;
 }

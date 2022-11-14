@@ -2,17 +2,29 @@
 
 .card {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   max-width: 340px;
   padding: 30px 20px;
   background-color: var.$white;
   border-radius: 12px;
   box-shadow: 0 0 6px rgb(0 0 0 / 14%);
+  margin: auto;
+
+  &-raw {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  &-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   &__header {
     margin: 0;
+    text-align: center;
 
     &--red {
       color: var.$red;
@@ -21,8 +33,10 @@
 
   &__main {
     margin: 30px 0;
+    text-align: center;
 
     &-file {
+      margin-bottom: 10px;
       color: var.$gray;
     }
   }
@@ -32,12 +46,33 @@
   }
 
   &-form {
-    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 340px;
+    min-height: 420px;
   }
 }
 
 .like-link {
   background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.link {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.link-button {
+  color: var.$blue;
+  font-weight: 500;
+  font-size: 13px;
+  font-family: Inter;
+  font-style: normal;
+  line-height: 11px;
   border: none;
   cursor: pointer;
 }
@@ -62,17 +97,25 @@
   }
 }
 
-.absolute {
+.modal {
   position: absolute;
   z-index: 999999;
   display: none;
 
   &--top {
-    top: -185;
+    top: -170;
+  }
+
+  &--bottom {
+    top: -30;
+    right: 0;
   }
 
   &--middle {
     top: 25%;
+    right: 0;
+    bottom: 0;
+    left: 0;
 
     &::before {
       position: fixed;
@@ -85,4 +128,32 @@
       content: "";
     }
   }
+}
+ 
+.input__file {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+}
+
+.alert {
+  position: absolute;
+  z-index: 999999;
+  width: 300px;
+  margin-top: 15%;
+}
+
+.close-button {
+  padding: 5px;
+  background: inherit;
+  border: none;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: var.$light-blue;
+  }
+}
+
+.button-list {
+  text-align: center;
 }

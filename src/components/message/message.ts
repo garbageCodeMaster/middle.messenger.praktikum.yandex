@@ -1,18 +1,29 @@
 import Block from 'core/Block';
+import defaultAvatar from '/static/defaultAvatar/man.png';
 
 import './message.scss';
 
 interface MessageProps {
-  type?: string;
   message?: string;
   time?: string;
+  user_id: number;
 }
 
 export class Message extends Block {
   static componentName = 'Message';
 
-  constructor({ type = 'outgoing', message, time }: MessageProps) {
-    super({ type, message, time });
+  constructor({ message, time, user_id }: MessageProps) {
+    let type, avatar;
+    if (user_id === window.store.getState().user!.id) {
+      type = 'outgoing';
+      avatar = window.store.getState().user!.avatar;
+    }
+    else {
+      type = 'incoming';
+      avatar = defaultAvatar;
+    }
+    
+    super({ type, message, time, avatar });
   }
 
   protected render(): string {
@@ -21,7 +32,7 @@ export class Message extends Block {
         {{{Avatar
           ref="AvatarRef"
           size="large"
-          src="https://place-hold.it/57"
+          src=avatar
           onClick=onClick 
         }}}
         <div class="message-wrapper">

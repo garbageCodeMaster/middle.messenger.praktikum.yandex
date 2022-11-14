@@ -4,13 +4,16 @@ import './chat.scss';
 
 interface ChatProps {
   id: number;
-  username: string;
-  lastMessage: string;
-  lastMessageTime: string;
-  unreadMessages: number | 0;
+  title: string;
   avatar: string | null;
+  unreadCount: number;
+  lastMessage: {
+    user: User,
+    time: string | Date,
+    content: string,
+  } | null;
   onClick: (B: Block) => boolean;
-  selected: true;
+  selected: boolean;
 }
 
 export class Chat extends Block {
@@ -22,9 +25,7 @@ export class Chat extends Block {
       events: {
         click: () => {
           if (onClick) {
-            if (onClick(this)) {
-              this.setProps({ selected: true });
-            }
+            onClick(this.props.chat);
           }
         },
       },
@@ -32,24 +33,25 @@ export class Chat extends Block {
   }
 
   protected render(): string {
+    const avatar = this.props.chat.avatar;
     return `
 <li class="chat {{#if selected}}chat--active{{/if}}">
     {{{Avatar
       ref="AvatarRef"
-      size="middle"
-      src="https://place-hold.it/47" 
+      size="medium"
+      src="${avatar}"
     }}}
 
     <div class="chat__content">
         <div class="chat__content-name">
-            {{chat.username}}
+            {{chat.title}}
         </div>
         <div class="chat__content-text">
-            {{chat.lastMessage}}
+            {{chat.lastMessage.content}}
         </div>
     </div>
     <div class="chat__time">
-        {{chat.lastMessageTime}}
+        {{chat.lastMessage.time}}
     </div>
 </li>
     `;

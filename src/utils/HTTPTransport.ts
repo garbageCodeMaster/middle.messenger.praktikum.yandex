@@ -1,3 +1,5 @@
+import { API_URL } from 'api/types';
+
 enum METHODS {
   GET = 'GET',
   POST = 'POST',
@@ -13,50 +15,63 @@ type RequestOptions = {
   headers?: Record<string, string>;
   timeout?: number;
   data?: unknown;
+  query?: string;
 };
+
+type HTTPMethod = (url: string, options?: RequestOptions) => Promise<unknown>;
 
 function queryStringify(data: RequestData) {
   if (!data) {
     return '';
   }
-  return Object.entries(data).reduce(
-    (acc, [key, value], index, arr) =>
-      `${acc}${key}=${value}${index < arr.length - 1 ? '&' : ''}`,
-    '?'
-  );
+  return '?' + Object
+    .entries(data)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
 }
 
 export class HTTPTransport {
-  public get = (url: string, options = {}) =>
-    this.request(url, { ...options, method: METHODS.GET });
+  private _apiURL = API_URL;
 
-  public post = (url: string, options = {}) =>
+  public get: HTTPMethod = (url, options) =>
+    this.request(url, { 
+      ...options, 
+      query: options?.data ? queryStringify(options.data as RequestData) : '',
+      method: METHODS.GET, 
+    });
+
+  public post: HTTPMethod  = (url, options) =>
     this.request(url, { ...options, method: METHODS.POST });
 
-  public put = (url: string, options = {}) =>
+  public put: HTTPMethod  = (url, options ) =>
     this.request(url, { ...options, method: METHODS.PUT });
 
-  public patch = (url: string, options = {}) => {
-    return this.request(url, { ...options, method: METHODS.PATCH });
-  };
+  public patch: HTTPMethod  = (url, options) => 
+    this.request(url, { ...options, method: METHODS.PATCH });
 
-  public delete = (url: string, options = {}) =>
+  public delete: HTTPMethod  = (url, options) =>
     this.request(url, { ...options, method: METHODS.DELETE });
 
-  private request = (url: string, options: RequestOptions) => {
-    const { method = METHODS.GET, headers = {}, data, timeout = 5000 } = options;
-
-    const query = method === METHODS.GET ? queryStringify(data as RequestData) : '';
+  private request: HTTPMethod  = (url, options) => {
+    const { method = METHODS.GET, headers = { "Content-Type": "application/json" }, data, query = '', timeout = 5000 } = options as RequestOptions;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-
-      xhr.open(method, `${url}${query}`);
+      
+      xhr.open(method, `${this._apiURL}${url}${query}`);
 
       Object.entries(headers).forEach(([key, value]) => xhr.setRequestHeader(key, value));
 
-      xhr.onload = () => (xhr.status >= 300 ? reject(xhr) : resolve(xhr));
+      xhr.onload = () => {
+        try {
+          resolve(JSON.parse(xhr.response));
+        }
+        catch {
+          resolve(xhr.response);
+        }
+      }
 
+      xhr.withCredentials = true;
       xhr.onabort = reject;
       xhr.onerror = reject;
       xhr.timeout = timeout;

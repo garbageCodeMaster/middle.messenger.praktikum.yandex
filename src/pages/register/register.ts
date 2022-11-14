@@ -1,16 +1,28 @@
-import Block from 'core/Block';
+import { PathRouter, Store, Block } from 'core';
+import AuthService from 'services/auth';
+import { withStore, withRouter } from 'utils';
 import { validateForm, ValidateType } from 'utils';
 
 import './register.scss';
 
+interface RegisterProps {
+  router: PathRouter;
+  store: Store<AppState>;
+  onToggleAppLoading?: () => void;
+  onNavigateNext?: () => void;
+};
+
 export class RegisterPage extends Block {
   static componentName = 'RegisterPage';
 
-  constructor() {
-    super();
+  constructor(props: RegisterProps) {
+    super(props);
 
     this.setProps({
-      onLogin: () => {
+      onNavigateNext: () => this.onNavigateNext(),
+      onSubmit: (event: SubmitEvent) => {
+        event.preventDefault();
+
         const validateData = [
           {
             inputType: ValidateType.Login,
@@ -71,16 +83,28 @@ export class RegisterPage extends Block {
         inputs.forEach((error) => error.input.refs.errorRef.setProps({ textError: errorMessage[error.inputType] }));
 
         console.log('action/register', validateData[0].inputValue, validateData[1].inputValue, validateData[2].inputValue, validateData[3].inputValue, validateData[4].inputValue, validateData[5].inputValue);
+        window.store.dispatch(AuthService.register, { 
+          login: validateData[0].inputValue, 
+          password: validateData[1].inputValue, 
+          email: validateData[3].inputValue, 
+          first_name: validateData[4].inputValue, 
+          second_name: validateData[4].inputValue, 
+          phone: validateData[5].inputValue 
+        });
       },
     });
+  }
+
+  onNavigateNext() {
+    this.props.router.go('/login');
   }
 
   render() {
     return `
       {{#Layout}}
         <main class="home-page">
-          <div class="card">
-            <form class="card-form">
+          <div class="card card-column">
+            {{#Form class="card-form" ref="form" onSubmit=onSubmit}}
               <div class="input-list">
                 <div class="form-header">
                     Register
@@ -146,17 +170,16 @@ export class RegisterPage extends Block {
               </div>
 
               <div class="button-list">
-                {{#Button type="action-button" onClick=onLogin}}Register{{/Button}}
+                {{#Button class="action-button" type="submit"}}Register{{/Button}}
 
-                {{{Link
-                  to="/login"
-                  text="Already have an account?"
-                }}}
+                {{#Button class="link link-button" type="button" onClick=onNavigateNext}}Already have an account?{{/Button}}
               </div>
-            </form>
+            {{/Form}}
           </div>
         </main>
       {{/Layout}}
     `;
   }
 }
+
+export default withRouter(withStore(RegisterPage));
