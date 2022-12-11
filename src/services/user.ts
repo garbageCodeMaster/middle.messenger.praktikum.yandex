@@ -17,6 +17,10 @@ type PasswordChangePayload = {
   newpassword: string,
 };
 
+type AvatarResponseData = {
+  avatar: string;
+}
+
 
 export class UserService {
   private api: UserAPI;
@@ -29,9 +33,9 @@ export class UserService {
     this.uploadAvatar = this.uploadAvatar.bind(this);
   }
 
-  public async uploadAvatar(avatar: FormData) {
+  public uploadAvatar: DispatchStateHandler<FormData> = async (dispatch, state, avatar) => {
     try {
-      const response = await this.api.uploadAvatar(avatar);
+      const response = await this.api.uploadAvatar(avatar) as AvatarResponseData;
 
       if (apiHasError(response)) {
         console.error(`Error: ${response.reason}`);

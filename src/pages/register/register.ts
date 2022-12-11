@@ -96,7 +96,7 @@ export class RegisterPage extends Block {
   }
 
   onNavigateNext() {
-    this.props.router.go('/login');
+    window.router.go('/login');
   }
 
   render() {

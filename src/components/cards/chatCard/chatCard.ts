@@ -1,4 +1,4 @@
-import Block from 'core/Block';
+import { Block } from 'core';
 
 import addUser from 'icons/plus-circle.svg';
 import deleteUser from 'icons/user-x.svg';

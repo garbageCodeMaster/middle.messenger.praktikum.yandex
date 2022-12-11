@@ -1,4 +1,4 @@
-import { HTTPTransport } from 'utils/HTTPTransport';
+import { HTTPTransport } from 'utils';
 import { APIError } from './types';
 
 type EditRequestData = {

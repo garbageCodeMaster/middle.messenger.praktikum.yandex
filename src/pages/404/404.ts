@@ -1,5 +1,5 @@
 import { PathRouter } from 'core';
-import Block from 'core/Block';
+import { Block } from 'core';
 import { withRouter } from 'utils';
 
 
@@ -21,9 +21,9 @@ export class Page404 extends Block {
 
   onNavigateNext() {
     if (window.store.getState().user) {
-      this.props.router.go('/messenger');
+      window.router.go('/messenger');
     } else {
-      this.props.router.go('/login');
+      window.router.go('/login');
     }
   }
 

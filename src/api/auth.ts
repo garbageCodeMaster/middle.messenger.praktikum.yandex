@@ -1,4 +1,4 @@
-import { HTTPTransport } from 'utils/HTTPTransport';
+import { HTTPTransport } from 'utils';
 import { APIError, UserDTO } from './types';
 
 type LoginRequestData = {

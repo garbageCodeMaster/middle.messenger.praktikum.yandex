@@ -1,4 +1,4 @@
-import Block from 'core/Block';
+import { Block } from 'core';
 
 import messageUrl from 'icons/message-circle.svg';
 import paperclipUrl from 'icons/paperclip.svg';

@@ -44,13 +44,13 @@ export class LoginPage extends Block {
         this.refs.loginComponent.refs.errorRef.setProps({ textError: errorMessage[ValidateType.Login] });
 
         console.log('action/login', validateData[0].inputValue, validateData[1].inputValue);
-        this.props.store.dispatch(AuthService.login, {"login": validateData[0].inputValue, "password": validateData[1].inputValue});
+        window.store.dispatch(AuthService.login, {"login": validateData[0].inputValue, "password": validateData[1].inputValue});
       },
     });
   }
 
   onNavigateNext() {
-    this.props.router.go('/register');
+    window.router.go('/register');
   }
 
   render() {

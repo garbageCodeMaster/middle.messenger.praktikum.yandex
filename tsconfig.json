@@ -1,17 +1,36 @@
 {
+  "ts-node": {
+    "require": ["tsconfig-paths/register"],
+    "files": true,
+    "esm": true
+  },
+  "files": ["./typings/app.d.ts"],
   "compilerOptions": {
-    "target": "es6",                                  
-    "module": "commonjs",                                
-    "rootDir": "./src",                                  
-    "baseUrl": "./src",                                  
-    "typeRoots": ["node_modules/@types", "typings/app.d.ts"],                                 
-    "sourceMap": true,                                
-    "forceConsistentCasingInFileNames": true,            
-    "strict": true,                                     
-    "noImplicitAny": true,                            
-    "strictNullChecks": true,                         
-    "noUnusedLocals": true,                          
-    "noUnusedParameters": true, 
-    "skipLibCheck": true 
-  }
+    "target": "es6", 
+    "module": "CommonJS", 
+    "rootDir": "./src", 
+    "baseUrl": "./", 
+    "typeRoots": ["node_modules/@types", "./typings/app.d.ts"], 
+    "sourceMap": true, 
+    "forceConsistentCasingInFileNames": true, 
+    "strict": true, 
+    "noImplicitAny": true, 
+    "strictNullChecks": true, 
+    "noUnusedLocals": false, 
+    "noUnusedParameters": false, 
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "paths": {
+      "core": ["src/core/index.ts"],
+      "api/*": ["src/api/*"], 
+      "components": ["src/components/index.ts"],
+      "pages/*": ["src/pages/*/index.ts"],
+      "utils": ["src/utils/index.ts"],
+      "layouts": ["src/layouts/index.ts"],
+      "icons/*": ["static/icons/*"],
+      "services/*": ["src/services/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*"]
 }

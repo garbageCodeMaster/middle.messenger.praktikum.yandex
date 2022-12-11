@@ -1,4 +1,4 @@
-import Block from 'core/Block';
+import { Block } from 'core';
 
 import './form.scss';
 
@@ -15,11 +15,11 @@ export class Form extends Block {
   }
 
   componentDidMount(): void {
-    this.getContent().addEventListener('submit', this.props.onSubmit);
+    this.getContent().addEventListener('submit', this.props.onSubmit as ()=>void);
   }
 
   componentWillUnmount(): void {
-    this.getContent().removeEventListener('submit', this.props.onSubmit);
+    this.getContent().removeEventListener('submit', this.props.onSubmit as ()=>void);
   }
 
   protected render(): string {
