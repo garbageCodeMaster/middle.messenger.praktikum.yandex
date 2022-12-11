@@ -1,9 +1,10 @@
 FROM node:17.6.0
 
-WORKDIR /src/app
+WORKDIR /app
 
 COPY package.json .
 COPY server.js .
+COPY . .
 
 RUN npm install
 
