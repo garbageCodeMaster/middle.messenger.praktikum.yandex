@@ -8,7 +8,8 @@
     "build": "webpack",
     "test": "mocha 'src/**/*.spec.ts' -n loader=ts-node/esm --extension ts",
     "lint:es": "eslint . --fix",
-    "lint:style": "stylelint . --fix"
+    "lint:style": "stylelint . --fix",
+    "preinstall": "npx npm-force-resolutions"
   },
   "alias": {
     "core": "./src/core",
@@ -24,11 +25,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "resolutions": {
+    "glob-parent": "5.1.2",
+    "trim": "0.0.3",
+    "trim-newlines": "3.0.1",
+    "yargs-parser": "13.1.2",
+    "postcss": "8.2.15"
+  },
   "devDependencies": {
-    "@anikin/parcel-transformer-handlebars": "1.0.2",
-    "@babel/register": "7.18.9",
-    "@parcel/resolver-glob": "2.8.0",
-    "@parcel/transformer-sass": "2.8.0",
     "@types/chai": "4.3.4",
     "@types/mocha": "10.0.1",
     "@typescript-eslint/eslint-plugin": "5.42.1",
@@ -49,13 +53,10 @@
     "mini-css-extract-plugin": "2.7.2",
     "mocha": "10.1.0",
     "nanoid": "3.3.4",
-    "postcss": "8.4.19",
     "postcss-import": "15.0.0",
     "postcss-nesting": "10.2.0",
-    "postcss-short": "5.0.0",
     "sass-loader": "13.2.0",
-    "stylelint": "14.14.1",
-    "stylelint-config-rational-order": "0.1.2",
+    "stylelint": "14.16.0",
     "stylelint-config-standard": "29.0.0",
     "stylelint-order": "5.0.0",
     "stylelint-scss": "4.3.0",
@@ -65,9 +66,7 @@
     "tsconfig-paths": "4.1.1",
     "typescript": "4.9.4",
     "webpack": "5.75.0",
-    "webpack-cli": "5.0.1"
-  },
-  "dependencies": {
-    "mocha-jsdom": "1.2.0"
+    "webpack-cli": "5.0.1",
+    "sass": "1.56.2"
   }
 }
