@@ -5,7 +5,7 @@ type Indexed<T = unknown> = {
 
 export function merge(lhs: Indexed, rhs: Indexed): Indexed {
     for (const p in rhs) {
-        if (!Object.prototype.hasOwnProperty.call(rhs, p)) {
+        if (!rhs.hasOwnProperty(p)) {
             continue;
         }
 
