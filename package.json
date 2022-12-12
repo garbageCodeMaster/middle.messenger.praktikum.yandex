@@ -11,8 +11,10 @@
     "lint:style": "stylelint . --fix",
     "preinstall": "npx npm-force-resolutions"
   },
-  "hooks": {
-    "pre-commit": "npm test && npm lint:es"
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test && npm run lint:es"
+    }
   },
   "alias": {
     "core": "./src/core",
