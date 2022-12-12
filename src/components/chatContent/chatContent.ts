@@ -10,7 +10,7 @@ interface ChatContentProps {
   status?: string;
 
   onClick?: () => void;
-};
+}
 
 export class ChatContent extends Block {
   static componentName = 'ChatContent';

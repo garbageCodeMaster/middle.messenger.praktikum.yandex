@@ -12,7 +12,7 @@ interface AboutProps {
   isLoading: boolean;
   onToggleAppLoading?: () => void;
   onNavigateNext?: () => void;
-};
+}
 
 export class AboutPage extends Block {
   static componentName = 'AboutPage';

@@ -15,7 +15,7 @@ type PasswordRequestData = {
   newpassword: string,
 };
 
-type ResponseData = {} | APIError;
+type ResponseData = Promise<unknown> | APIError;
 
 export default class UserAPI {
   private _request: HTTPTransport = new HTTPTransport();
@@ -29,4 +29,4 @@ export default class UserAPI {
   public uploadAvatar = (data: FormData): ResponseData =>
     this._request.put('user/profile/avatar', {data: data, headers: {}});
   
-};
+}

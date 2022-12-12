@@ -2,7 +2,7 @@ import { HTTPTransport } from 'utils';
 import { APIError } from './types';
 
 
-type ResponseData = {} | APIError;
+type ResponseData = Promise<unknown> | APIError;
 
 export default class ChatAPI {
   private _request: HTTPTransport = new HTTPTransport();
@@ -31,4 +31,4 @@ export default class ChatAPI {
   public getToken = (id: number) =>
     this._request.post(`chats/token/${id}`, {});
     
-};
+}

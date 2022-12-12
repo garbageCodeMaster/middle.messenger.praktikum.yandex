@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import EventBus from './EventBus';
-const Handlebars = require('handlebars');
+import Handlebars from 'handlebars';
 
 
 interface BlockMeta<P = any> {

@@ -10,7 +10,7 @@ interface MessengerProps {
   isLoading: boolean;
   onToggleAppLoading?: () => void;
   onNavigateNext?: () => void;
-};
+}
 
 export class MessengerPage extends Block {
   static componentName = 'MessegerPage';

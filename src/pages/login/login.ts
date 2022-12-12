@@ -10,7 +10,7 @@ interface LoginProps {
   store: Store<AppState>;
   onToggleAppLoading?: () => void;
   onNavigateNext?: () => void;
-};
+}
 
 export class LoginPage extends Block {
   static componentName = 'LoginPage';

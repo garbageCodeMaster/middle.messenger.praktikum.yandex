@@ -8,7 +8,7 @@ interface ProfileProps {
   avatar?: string;
 
   onClick?: () => void;
-};
+}
 
 
 export class Profile extends Block {

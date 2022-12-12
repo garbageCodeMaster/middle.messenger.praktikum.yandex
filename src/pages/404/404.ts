@@ -6,7 +6,7 @@ import { withRouter } from 'utils';
 interface Page404Props {
   router: PathRouter;
   onNavigateNext?: () => void;
-};
+}
 
 export class Page404 extends Block {
   static componentName = 'Page404';
