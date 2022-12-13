@@ -191,7 +191,10 @@ export class AboutPage extends Block {
           return;
         }
 
-        window.store.dispatch(UserService.uploadAvatar, this.state.file);
+        const file = new FormData();
+        file.append("avatar", this.state.file);
+
+        window.store.dispatch(UserService.uploadAvatar, file);
         this.setState({file: null});
         this.refs.UploadCard.refs.file.setProps({label: null});
         this.refs.UploadCard.hide();
@@ -205,6 +208,7 @@ export class AboutPage extends Block {
 
   render() {
     const {user} = window.store.getState();
+    const avatar = user!.avatar;
 
     return `
     {{#Layout}}
@@ -213,7 +217,7 @@ export class AboutPage extends Block {
             {{{Avatar
               ref="AvatarRef"
               size="gargantuan"
-              src=avatar
+              src="${avatar}"
               onClick=onClick 
             }}}
             

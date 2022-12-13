@@ -1,5 +1,5 @@
 import UserAPI from 'api/user';
-import { DispatchStateHandler, UserDTO } from 'api/types';
+import { API_URL, DispatchStateHandler, UserDTO } from 'api/types';
 import { transformUser, apiHasError } from 'utils';
 
 type UserDataChangePayload = {
@@ -47,7 +47,7 @@ export class UserService {
         return;
       } 
 
-      window.store.setByPath('user.avatar', response.avatar);
+      window.store.setByPath('user.avatar', API_URL+'resources'+response.avatar);
       window.store.setApiMessage({ apiMessage: {
         message: `Avatar was uploaded successfully`,
         type: 'success' 

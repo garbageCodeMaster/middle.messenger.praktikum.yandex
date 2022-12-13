@@ -27,6 +27,6 @@ export default class UserAPI {
     this._request.put('user/password', {data: data});
 
   public uploadAvatar = (data: FormData): ResponseData =>
-    this._request.put('user/profile/avatar', {data: data, headers: {}});
+    this._request.put('user/profile/avatar', {data: data, formData: true, headers: {}});
   
 }
