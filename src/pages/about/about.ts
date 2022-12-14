@@ -2,7 +2,7 @@ import { PathRouter, Store, Block } from 'core';
 import AuthService from 'services/auth';
 import UserService from 'services/user';
 import { withStore, withRouter, withIsLoading, validateForm, ValidateType } from 'utils';
-import { getMyData } from 'utils/getMyData';
+import { getMyData } from 'utils';
 
 import './about.scss';
 
@@ -12,7 +12,7 @@ interface AboutProps {
   isLoading: boolean;
   onToggleAppLoading?: () => void;
   onNavigateNext?: () => void;
-};
+}
 
 export class AboutPage extends Block {
   static componentName = 'AboutPage';
@@ -86,7 +86,8 @@ export class AboutPage extends Block {
         event.preventDefault();
 
         const inputValue = {} as Record<string, unknown>;
-        Object.values(this.refs.InputsList.refs).forEach((field) => {
+        Object.values(this.refs.InputsList.refs).forEach((field: Block) => {
+          // @ts-expect-error
           inputValue[field.props.key] = (field.refs.input.getContent() as HTMLInputElement).value;
         });
 
@@ -169,7 +170,7 @@ export class AboutPage extends Block {
         });
 
 
-        this.props.store.dispatch(this.state === "editData" ? UserService.editData : UserService.editPassword, inputValue);
+        window.store.dispatch(this.state.action === "editData" ? UserService.editData : UserService.editPassword, inputValue);
       },
       onFileSelected: (event: InputEvent) => {
         const { files }: { files: FileList | null } = event.target as HTMLInputElement;
@@ -190,7 +191,10 @@ export class AboutPage extends Block {
           return;
         }
 
-        this.props.store.dispatch(UserService.uploadAvatar, this.state.file);
+        const file = new FormData();
+        file.append("avatar", this.state.file);
+
+        window.store.dispatch(UserService.uploadAvatar, file);
         this.setState({file: null});
         this.refs.UploadCard.refs.file.setProps({label: null});
         this.refs.UploadCard.hide();
@@ -204,6 +208,8 @@ export class AboutPage extends Block {
 
   render() {
     const {user} = window.store.getState();
+    const avatar = user!.avatar;
+
     return `
     {{#Layout}}
       <div>
@@ -211,11 +217,11 @@ export class AboutPage extends Block {
             {{{Avatar
               ref="AvatarRef"
               size="gargantuan"
-              src=avatar
+              src="${avatar}"
               onClick=onClick 
             }}}
             
-            <h2 class="about__name">${user?.displayName}</h2>
+            <h2 class="about__name">${user?.displayName || "No username"}</h2>
 
             {{{InputsList 
               ref="InputsList" 

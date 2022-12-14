@@ -1,4 +1,5 @@
 export { validateForm, ValidateType, ValidateData } from './validateForm';
+export { HTTPTransport } from './HTTPTransport';
 export { withRouter} from './withRouter';
 export { withStore } from './withStore';
 export { withStoreChat } from './withStoreChat';
@@ -11,3 +12,4 @@ export { set } from './set';
 export { formatDate } from './formatDate';
 export { merge } from './merge';
 export { isEqual } from './isEqual';
+export { getMyData } from './getMyData';

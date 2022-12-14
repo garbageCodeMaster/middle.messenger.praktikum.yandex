@@ -21,7 +21,7 @@ export default function registerComponent<Props>(Component: BlockConstructable<P
 
     (Object.keys(hash) as any).forEach((key: keyof Props) => {
       if (typeof this[key] === 'string') {
-        hash[key] = hash[key].replace(new RegExp(`{{${key}}}`, 'i'), this[key]);
+        hash[key] = hash[key].replace(new RegExp(`{{${String(key)}}}`, 'i'), this[key]);
       }
     });
 

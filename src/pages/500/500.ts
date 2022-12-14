@@ -1,11 +1,11 @@
-import Block from 'core/Block';
+import { Block } from 'core';
 import { PathRouter } from 'core';
 import { withRouter } from 'utils';
 
 interface Page500Props {
-  router: PathRouter;
+  router?: PathRouter;
   onNavigateNext?: () => void;
-};
+}
 
 export class Page500 extends Block {
   static componentName = 'Page404';
@@ -20,9 +20,9 @@ export class Page500 extends Block {
 
   onNavigateNext() {
     if (window.store.getState().user) {
-      this.props.router.go('/messenger');
+      window.router.go('/messenger');
     } else {
-      this.props.router.go('/login');
+      window.router.go('/login');
     }
   }
 

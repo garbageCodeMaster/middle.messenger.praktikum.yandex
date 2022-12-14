@@ -2,3 +2,4 @@
 /dist
 /handlebars.config.js
 /server.js
+/webpack.config.js

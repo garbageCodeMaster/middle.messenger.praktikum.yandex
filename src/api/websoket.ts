@@ -27,8 +27,8 @@ export default class Socket {
     this._webSocket.addEventListener("message", (event: MessageEvent) => {
       try {
         const data = JSON.parse(event.data);
-        let chats = window.store.getState().chats;
-        let chat = chats.find(chat => this._chatId === chat.id);
+        const chats = window.store.getState().chats;
+        const chat = chats.find(chat => this._chatId === chat.id);
     
         if (!chat) return;
         if (data.type !== 'user connected' &&
@@ -64,7 +64,7 @@ export default class Socket {
     });
   }
 
-  private _getMessages(count: string = '0') {
+  private _getMessages(count = '0') {
     this._webSocket.send(JSON.stringify({
       content: count,
       type: 'get old',
@@ -79,4 +79,4 @@ export default class Socket {
       })
     );
   }
-};
+}

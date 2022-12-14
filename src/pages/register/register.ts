@@ -10,7 +10,7 @@ interface RegisterProps {
   store: Store<AppState>;
   onToggleAppLoading?: () => void;
   onNavigateNext?: () => void;
-};
+}
 
 export class RegisterPage extends Block {
   static componentName = 'RegisterPage';
@@ -96,7 +96,7 @@ export class RegisterPage extends Block {
   }
 
   onNavigateNext() {
-    this.props.router.go('/login');
+    window.router.go('/login');
   }
 
   render() {

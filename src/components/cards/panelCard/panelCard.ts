@@ -1,4 +1,4 @@
-import Block from 'core/Block';
+import { Block } from 'core';
 
 import imageUrl from 'icons/image.svg';
 import filetextUrl from 'icons/file-text.svg';

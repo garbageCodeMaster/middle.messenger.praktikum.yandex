@@ -1,4 +1,4 @@
-import Block from 'core/Block';
+import { Block } from 'core';
 import ChatService from 'services/chat';
 
 interface ChatContentProps {
@@ -10,7 +10,7 @@ interface ChatContentProps {
   status?: string;
 
   onClick?: () => void;
-};
+}
 
 export class ChatContent extends Block {
   static componentName = 'ChatContent';

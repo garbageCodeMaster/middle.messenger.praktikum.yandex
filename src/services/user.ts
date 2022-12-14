@@ -1,5 +1,5 @@
 import UserAPI from 'api/user';
-import { DispatchStateHandler, UserDTO } from 'api/types';
+import { API_URL, DispatchStateHandler, UserDTO } from 'api/types';
 import { transformUser, apiHasError } from 'utils';
 
 type UserDataChangePayload = {
@@ -17,6 +17,10 @@ type PasswordChangePayload = {
   newpassword: string,
 };
 
+type AvatarResponseData = {
+  avatar: string;
+}
+
 
 export class UserService {
   private api: UserAPI;
@@ -29,9 +33,9 @@ export class UserService {
     this.uploadAvatar = this.uploadAvatar.bind(this);
   }
 
-  public async uploadAvatar(avatar: FormData) {
+  public uploadAvatar: DispatchStateHandler<FormData> = async (dispatch, state, avatar) => {
     try {
-      const response = await this.api.uploadAvatar(avatar);
+      const response = await this.api.uploadAvatar(avatar) as AvatarResponseData;
 
       if (apiHasError(response)) {
         console.error(`Error: ${response.reason}`);
@@ -43,7 +47,7 @@ export class UserService {
         return;
       } 
 
-      window.store.setByPath('user.avatar', response.avatar);
+      window.store.setByPath('user.avatar', API_URL+'resources'+response.avatar);
       window.store.setApiMessage({ apiMessage: {
         message: `Avatar was uploaded successfully`,
         type: 'success' 

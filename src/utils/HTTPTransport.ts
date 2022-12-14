@@ -1,4 +1,5 @@
 import { API_URL } from 'api/types';
+import { Form } from 'components';
 
 enum METHODS {
   GET = 'GET',
@@ -16,6 +17,7 @@ type RequestOptions = {
   timeout?: number;
   data?: unknown;
   query?: string;
+  formData?: boolean;
 };
 
 type HTTPMethod = (url: string, options?: RequestOptions) => Promise<unknown>;
@@ -40,27 +42,31 @@ export class HTTPTransport {
       method: METHODS.GET, 
     });
 
-  public post: HTTPMethod  = (url, options) =>
+  public post: HTTPMethod = (url, options) =>
     this.request(url, { ...options, method: METHODS.POST });
 
-  public put: HTTPMethod  = (url, options ) =>
+  public put: HTTPMethod = (url, options ) =>
     this.request(url, { ...options, method: METHODS.PUT });
 
-  public patch: HTTPMethod  = (url, options) => 
+  public patch: HTTPMethod = (url, options) => 
     this.request(url, { ...options, method: METHODS.PATCH });
 
-  public delete: HTTPMethod  = (url, options) =>
+  public delete: HTTPMethod = (url, options) =>
     this.request(url, { ...options, method: METHODS.DELETE });
 
-  private request: HTTPMethod  = (url, options) => {
-    const { method = METHODS.GET, headers = { "Content-Type": "application/json" }, data, query = '', timeout = 5000 } = options as RequestOptions;
+  private request: HTTPMethod = (url, options) => {
+    const { method = METHODS.GET, headers = { "Content-Type": "application/json" }, data, query = '', timeout = 5000, formData = false } = options as RequestOptions;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       
       xhr.open(method, `${this._apiURL}${url}${query}`);
 
-      Object.entries(headers).forEach(([key, value]) => xhr.setRequestHeader(key, value));
+      if (!formData) {
+        Object.entries(headers).forEach(([key, val]) => {
+            xhr.setRequestHeader(key, val)
+        })
+    }
 
       xhr.onload = () => {
         try {
@@ -77,7 +83,14 @@ export class HTTPTransport {
       xhr.timeout = timeout;
       xhr.ontimeout = reject;
 
-      method === METHODS.GET || !data ? xhr.send() : xhr.send(JSON.stringify(data));
+      if (method === METHODS.GET || !data) {
+        xhr.send()
+      } else if (formData) {
+        xhr.send(data as FormData)
+      } else {
+        xhr.send(JSON.stringify(data))
+      }
+
     });
   };
 }

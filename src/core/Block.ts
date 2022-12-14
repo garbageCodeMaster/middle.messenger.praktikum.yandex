@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
-import Handlebars from 'handlebars';
 import EventBus from './EventBus';
+import Handlebars from 'handlebars';
+
 
 interface BlockMeta<P = any> {
   props: P;
@@ -35,9 +36,9 @@ export default class Block<P = any> {
 
   private readonly _meta: BlockMeta;
 
-  protected _element: Nullable<HTMLElement> = null;
+  protected _element!: HTMLElement;
 
-  protected readonly _props: P;
+  protected readonly _props: BlockProps;
 
   protected children: {[id: string]: Block} = {};
 
@@ -137,7 +138,7 @@ export default class Block<P = any> {
     this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, { ...this._props });
   };
 
-  get props() {
+  get props(): BlockProps {
     return this._props;
   }
 
@@ -178,7 +179,7 @@ export default class Block<P = any> {
       }, 100);
     }
 
-    return this.element!;
+    return this.element;
   }
 
   _makePropsProxy(props: P): any {
@@ -202,26 +203,26 @@ export default class Block<P = any> {
   }
 
   _removeEvents() {
-    const { events } = this._props as any;
+    const { events } = this._props;
 
     if (!events || !this._element) {
       return;
     }
 
-    Object.entries(events).forEach(([event, listener]) => {
-      this._element!.removeEventListener(event, listener);
+    Object.keys(events).forEach((eventName) => {
+      this._element.removeEventListener(eventName, events[eventName]);
     });
   }
 
   _addEvents() {
-    const { events } = this._props as any;
+    const { events } = this._props;
 
     if (!events) {
       return;
     }
 
-    Object.entries(events).forEach(([event, listener]) => {
-      this._element!.addEventListener(event, listener);
+    Object.keys(events).forEach((eventName) => {
+      this._element.addEventListener(eventName, events[eventName]);
     });
   }
 

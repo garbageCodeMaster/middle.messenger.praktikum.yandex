@@ -32,7 +32,7 @@ export class Store<State extends Record<string, any>> extends EventBus {
   public setChat(chatsUpdated: Chat[]) {
     const prevState = { ...this.state };
 
-    let chatsInStore = [...this.getState().chats];
+    const chatsInStore = [...this.getState().chats];
     
     chatsUpdated.forEach((chatUpdated: Chat) => {
       const chatInStore = chatsInStore.find((chatInStore: Chat | null) => chatUpdated!.id === chatInStore!.id);
@@ -42,7 +42,7 @@ export class Store<State extends Record<string, any>> extends EventBus {
       }
     });
 
-    let newChatStore = chatsInStore.map((chatInStore: Chat) => {
+    const newChatStore = chatsInStore.map((chatInStore: Chat) => {
         const chatUpdated = chatsUpdated.find((chatUpdated) => chatUpdated!.id === chatInStore!.id);
 
         if (chatUpdated) {

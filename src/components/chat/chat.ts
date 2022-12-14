@@ -1,4 +1,4 @@
-import Block from 'core/Block';
+import { Block } from 'core';
 
 import './chat.scss';
 
@@ -25,6 +25,7 @@ export class Chat extends Block {
       events: {
         click: () => {
           if (onClick) {
+            // @ts-expect-error
             onClick(this.props.chat);
           }
         },
@@ -33,6 +34,7 @@ export class Chat extends Block {
   }
 
   protected render(): string {
+    // @ts-expect-error
     const avatar = this.props.chat.avatar;
     return `
 <li class="chat {{#if selected}}chat--active{{/if}}">

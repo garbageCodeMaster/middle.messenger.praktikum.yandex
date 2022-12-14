@@ -1,5 +1,5 @@
-import { HTTPTransport } from 'utils/HTTPTransport';
-import { APIError, UserDTO } from './types';
+import { HTTPTransport } from 'utils';
+import { APIError } from './types';
 
 type LoginRequestData = {
   login: string;
@@ -15,7 +15,7 @@ type RegisterRequestData = {
   phone: string
 };
 
-type ResponseData = {} | APIError;
+type ResponseData = Promise<unknown> | APIError;
 
 export default class AuthAPI {
   private _request: HTTPTransport = new HTTPTransport();
@@ -31,4 +31,4 @@ export default class AuthAPI {
   
   public logout = () => 
     this._request.post('auth/logout');
-};
+}

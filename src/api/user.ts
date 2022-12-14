@@ -1,4 +1,4 @@
-import { HTTPTransport } from 'utils/HTTPTransport';
+import { HTTPTransport } from 'utils';
 import { APIError } from './types';
 
 type EditRequestData = {
@@ -15,7 +15,7 @@ type PasswordRequestData = {
   newpassword: string,
 };
 
-type ResponseData = {} | APIError;
+type ResponseData = Promise<unknown> | APIError;
 
 export default class UserAPI {
   private _request: HTTPTransport = new HTTPTransport();
@@ -27,6 +27,6 @@ export default class UserAPI {
     this._request.put('user/password', {data: data});
 
   public uploadAvatar = (data: FormData): ResponseData =>
-    this._request.put('user/profile/avatar', {data: data, headers: {}});
+    this._request.put('user/profile/avatar', {data: data, formData: true, headers: {}});
   
-};
+}

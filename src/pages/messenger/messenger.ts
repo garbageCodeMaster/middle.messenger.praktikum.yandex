@@ -10,7 +10,7 @@ interface MessengerProps {
   isLoading: boolean;
   onToggleAppLoading?: () => void;
   onNavigateNext?: () => void;
-};
+}
 
 export class MessengerPage extends Block {
   static componentName = 'MessegerPage';
@@ -59,9 +59,9 @@ export class MessengerPage extends Block {
 
   onNavigateMyProfile() {
     if (window.store.getState().user) {
-      this.props.router.go('/profile');
+      window.router.go('/profile');
     } else {
-      this.props.router.go('/login');
+      window.router.go('/login');
     }
   }
 
